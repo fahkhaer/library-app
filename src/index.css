@@ -2,140 +2,215 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-
+/* ============================================================
+   BASE TOKENS (SHADCN + FIGMA)
+   ============================================================ */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    /* ----------------------------------------
+       FONT FAMILY
+    ---------------------------------------- */
+    --font-sans: 'Quicksand', sans-serif;
+
+    /* ----------------------------------------
+       FONT WEIGHTS (Figma)
+    ---------------------------------------- */
+    --font-regular: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+    --font-extrabold: 800;
+
+    /* ----------------------------------------
+       TYPOGRAPHY — DISPLAY
+    ---------------------------------------- */
+    --text-display-3xl: 3.75rem;
+    --text-display-3xl--line-height: 4.5rem;
+
+    --text-display-2xl: 3rem;
+    --text-display-2xl--line-height: 3.75rem;
+    --text-display-2xl--letter-spacing: -0.02em;
+
+    --text-display-xl: 2.5rem;
+    --text-display-xl--line-height: 3rem;
+    --text-display-xl--letter-spacing: -0.02em;
+
+    --text-display-lg: 2.25rem;
+    --text-display-lg--line-height: 2.75rem;
+    --text-display-lg--letter-spacing: -0.02em;
+
+    --text-display-md: 2rem;
+    --text-display-md--line-height: 2.5rem;
+
+    --text-display-sm: 1.75rem;
+    --text-display-sm--line-height: 2.375rem;
+
+    --text-display-xs: 1.5rem;
+    --text-display-xs--line-height: 2.25rem;
+
+    /* ----------------------------------------
+       TYPOGRAPHY — TEXT
+    ---------------------------------------- */
+    --text-xl: 1.25rem;
+    --text-xl--line-height: 2.125rem;
+
+    --text-lg: 1.125rem;
+    --text-lg--line-height: 2rem;
+
+    --text-md: 1rem;
+    --text-md--line-height: 1.875rem;
+
+    --text-sm: 0.875rem;
+    --text-sm--line-height: 1.75rem;
+
+    --text-xs: 0.75rem;
+    --text-xs--line-height: 1.5rem;
+
+    /* ----------------------------------------
+       COLORS — NEUTRAL (Figma)
+    ---------------------------------------- */
+    --neutral-25: #fdfdfd;
+    --neutral-50: #fafafa;
+    --neutral-100: #f5f5f5;
+    --neutral-200: #e9eaeb;
+    --neutral-300: #d5d7da;
+    --neutral-400: #a4a7ae;
+    --neutral-500: #717680;
+    --neutral-600: #535862;
+    --neutral-700: #414651;
+    --neutral-800: #252b37;
+    --neutral-900: #181d27;
+    --neutral-950: #0a0d12;
+
+    /* ----------------------------------------
+       PRIMARY COLOR (Figma)
+    ---------------------------------------- */
+    --primary-100: #f6f9fe;
+    --primary-200: #d2e3ff;
+    --primary-500: #1c65da;
+
+    /* Override shadcn tokens */
+    --primary: var(--primary-500);
+    --primary-foreground: #ffffff;
+
+    /* ----------------------------------------
+       ACCENT COLORS (Figma)
+    ---------------------------------------- */
+    --accent-red: #d9206e;
+    --accent-green: #079455;
+    --accent-yellow: #fdb022;
+
+    /* ----------------------------------------
+       BASE COLORS
+    ---------------------------------------- */
+    --background: #ffffff;
+    --foreground: var(--neutral-900);
+
+    --card: #ffffff;
+    --card-foreground: var(--neutral-900);
+
+    --popover: #ffffff;
+    --popover-foreground: var(--neutral-900);
+
+    /* ----------------------------------------
+       UI COLORS (Override shadcn)
+    ---------------------------------------- */
+    --secondary: #f5f5f5;
+    --secondary-foreground: var(--neutral-900);
+
+    --muted: var(--neutral-100);
+    --muted-foreground: var(--neutral-500);
+
+    --accent: var(--neutral-100);
+    --accent-foreground: var(--neutral-900);
+
+    --destructive: var(--accent-red);
+    --destructive-foreground: #ffffff;
+
+    --border: var(--neutral-200);
+    --input: var(--neutral-300);
+    --ring: var(--primary-500);
+
+    @font-face {
+      font-family: 'Quicksand';
+      src: url('/fonts/Quicksand-Regular.ttf') format('truetype');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'Quicksand';
+      src: url('/fonts/Quicksand-Medium.ttf') format('truetype');
+      font-weight: 500;
+    }
+    @font-face {
+      font-family: 'Quicksand';
+      src: url('/fonts/Quicksand-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+    }
+    @font-face {
+      font-family: 'Quicksand';
+      src: url('/fonts/Quicksand-Bold.ttf') format('truetype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'Quicksand';
+      src: url('/fonts/Quicksand-ExtraBold.ttf') format('truetype');
+      font-weight: 800;
+    }
+
+    /* ----------------------------------------
+       SHADCN EXTRA TOKENS
+    ---------------------------------------- */
+    --radius: 0.5rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
   }
+
+  /* ============================================================
+     DARK MODE TOKENS
+     ============================================================ */
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: #0a0d12;
+    --foreground: #ffffff;
+
+    --card: #0a0d12;
+    --card-foreground: #ffffff;
+
+    --popover: #0a0d12;
+    --popover-foreground: #ffffff;
+
+    --primary: #d2e3ff;
+    --primary-foreground: #0a0d12;
+
+    --secondary: #181d27;
+    --secondary-foreground: #ffffff;
+
+    --muted: #181d27;
+    --muted-foreground: #a4a7ae;
+
+    --accent: #181d27;
+    --accent-foreground: #ffffff;
+
+    --destructive: #d9206e;
+    --destructive-foreground: #ffffff;
+
+    --border: #181d27;
+    --input: #252b37;
+    --ring: #d2e3ff;
   }
-}
 
-
-
-@layer base {
+  /* ============================================================
+     BASE ELEMENTS
+     ============================================================ */
   * {
-    @apply border-border;
+    @apply box-border;
   }
+
   body {
+    font-family: var(--font-sans);
     @apply bg-background text-foreground;
   }
 }
