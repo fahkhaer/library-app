@@ -4,28 +4,10 @@
 
 @font-face {
   font-family: 'Quicksand';
-  src: url('/fonts/Quicksand-Regular.ttf') format('truetype');
-  font-weight: 400;
-}
-@font-face {
-  font-family: 'Quicksand';
-  src: url('/fonts/Quicksand-Medium.ttf') format('truetype');
-  font-weight: 500;
-}
-@font-face {
-  font-family: 'Quicksand';
-  src: url('/fonts/Quicksand-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-}
-@font-face {
-  font-family: 'Quicksand';
-  src: url('/fonts/Quicksand-Bold.ttf') format('truetype');
-  font-weight: 700;
-}
-@font-face {
-  font-family: 'Quicksand';
-  src: url('/fonts/Quicksand-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
+  src: url('/fonts/Quicksand-VariableFont_wght.ttf')
+    format('truetype-variations');
+  font-weight: 100 900;
+  font-style: normal;
 }
 
 /* ============================================================
@@ -37,7 +19,7 @@
     /* ----------------------------------------
        FONT FAMILY
     ---------------------------------------- */
-    --font-sans: 'Quicksand', sans-serif;
+    --font-quicksand: 'Quicksand', sans-serif;
 
     /* ----------------------------------------
        FONT WEIGHTS (Figma)
