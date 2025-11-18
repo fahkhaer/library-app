@@ -1,4 +1,3 @@
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
@@ -14,10 +13,16 @@ import Container from '@/components/layout/Container';
 import { Share2, Star } from 'lucide-react';
 import LoadMoreButton from '@/components/ui/LoadMoreButton';
 import Card from '@/components/ui/Card';
-
-const rating = 4;
+import { Detailbook } from '@/api/booklist';
+import ReviewersCard from '@/components/ui/ReviewersCard';
+import { Review } from '@/types/reviews';
 
 function DetailPage() {
+  const { data, isLoading, error } = Detailbook(1);
+  console.log(data);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error...</p>;
   return (
     <Container className='md:pb-30'>
       <Breadcrumb className='pb-6 text-sm-semibold'>
@@ -41,7 +46,7 @@ function DetailPage() {
           <BreadcrumbSeparator />
 
           <BreadcrumbItem>
-            <BreadcrumbPage>The Psychology of Money</BreadcrumbPage>
+            <BreadcrumbPage>{data.title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -60,17 +65,17 @@ function DetailPage() {
         <div className='flex flex-col py-[18px] flex-1 gap-5'>
           <div className='flex flex-col gap-0.5 items-start'>
             <Badge variant={'outline'} className='px-2 rounded-sm w-35'>
-              Business & Economics{' '}
+              {data.category.name}{' '}
             </Badge>
-            <h2>Book Name</h2>
-            <h4>Author Name</h4>
+            <h2>{data.title}</h2>
+            <h4>{data.author.name}</h4>
             {/* rating */}
             <div className='flex gap-0.5 items-center'>
               <Star
                 className='inline-block size-6 text-[#FFAB0D]'
                 fill='#FFAB0D'
               />
-              <span className='text-md-semibold ml-1'>4.5</span>
+              <span className='text-md-semibold ml-1'>{data.rating}</span>
             </div>
             <Statistics />
           </div>
@@ -80,13 +85,7 @@ function DetailPage() {
           {/* description */}
           <div>
             <p className='text-xl font-bold'>Description</p>
-            <p className='text-md-regular'>
-              The Psychology of Money” explores how emotions, biases, and human
-              behavior shape the way we think about money, investing, and
-              financial decisions. Morgan Housel shares timeless lessons on
-              wealth, greed, and happiness, showing that financial success is
-              not about knowledge, but about behavior.
-            </p>
+            <p className='text-md-regular'>{data.description}</p>
           </div>
           {/* buttons */}
           <div className='flex  gap-2 items-center h-12'>
@@ -115,45 +114,16 @@ function DetailPage() {
               className='inline-block size-6 text-[#FFAB0D]'
               fill='#FFAB0D'
             />
-            <span className='text-md-semibold ml-1'>4.5 (24 Ulasan)</span>
+            <span className='text-md-semibold ml-1'>
+              ( {data.reviewCount} Ulasan)
+            </span>
           </div>
         </div>
-        {/* author card */}
-        <div className='bg-white flex flex-col rounded-2xl md:w-1/2 gap-4 p-4 '>
-          {/* profile */}
-          <div className='flex gap-3 h-16 items-center '>
-            <Avatar className='size-16 '>
-              <AvatarImage
-                className='rounded-full'
-                src='https://github.com/shadcn.png'
-                alt='@shadcn'
-              />
-            </Avatar>
-            <div>
-              <h2>Author Name</h2>
-              <p className='text-[#0A0D12] text-md-medium'>
-                25 August 2025, 13:38
-              </p>
-            </div>
-          </div>
-          {/* review */}
-          <div className='flex gap-0.5'>
-            <div className='flex'>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className='inline-block size-6 text-[#FFAB0D]'
-                  fill={i < rating ? '#FFAB0D' : 'none'}
-                />
-              ))}
-            </div>
-          </div>
-          {/* comment */}
-          <p className='text-md-semibold'>
-            Lorem ipsum dolor sit amet consectetur. Pulvinar porttitor aliquam
-            viverra nunc sed facilisis. Integer tristique nullam morbi mauris
-            ante.
-          </p>
+        {/* reviewers card */}
+        <div className='flex flex-wrap gap-5 '>
+          {data.reviews.map((review: Review) => (
+            <ReviewersCard key={review.id} review={review} />
+          ))}
         </div>
         <LoadMoreButton />
       </section>
