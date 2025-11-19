@@ -1,9 +1,12 @@
+import { GetCategories } from '@/api/categories';
 import Container from '@/components/layout/Container';
 import Card from '@/components/ui/Card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Star } from 'lucide-react';
 
 function Category() {
+  const { data, isLoading, error } = GetCategories();
+
   return (
     <Container className='flex gap-5 md:pb-[97px]'>
       {/*left side */}
@@ -13,47 +16,19 @@ function Category() {
           <div className='space-y-2.5'>
             <h3>FILTER</h3>
             <h2>Category</h2>
-            <div className='flex items-center gap-2'>
-              <Checkbox id='fiction' />
-              <label htmlFor='fiction' className='text-md-regular'>
-                Fiction
-              </label>
-            </div>
 
-            <div className='flex items-center gap-2'>
-              <Checkbox id='nonfiction' />
-              <label htmlFor='nonfiction' className='text-md-regular'>
-                Non-fiction
-              </label>
-            </div>
+            {isLoading && <p>Loading...</p>}
+            {error && <p className='text-red-500'>Failed to load categories</p>}
 
-            <div className='flex ßitems-center gap-2'>
-              <Checkbox id='selfimprove' />
-              <label htmlFor='selfimprove' className='text-md-regular'>
-                Self-Improve
-              </label>
-            </div>
-
-            <div className='flex items-center gap-2'>
-              <Checkbox id='finance' />
-              <label htmlFor='finance' className='text-md-regular'>
-                Finance
-              </label>
-            </div>
-
-            <div className='flex items-center gap-2'>
-              <Checkbox id='science' />
-              <label htmlFor='science' className='text-md-regular'>
-                Science
-              </label>
-            </div>
-
-            <div className='flex items-center gap-2'>
-              <Checkbox id='education' />
-              <label htmlFor='education' className='text-md-regular'>
-                Education
-              </label>
-            </div>
+            {/* categories here */}
+            {data?.map((item) => (
+              <div key={item.id} className='flex items-center gap-2'>
+                <Checkbox id={`cat-${item.id}`} />
+                <label htmlFor={`cat-${item.id}`} className='text-md-regular'>
+                  {item.name}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
 
