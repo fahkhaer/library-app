@@ -2,6 +2,7 @@ import Container from '@/components/layout/Container';
 import { Button } from '@/components/ui/button';
 import CardList from '@/components/ui/CardList';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Link } from 'react-router-dom';
 
 function Cart() {
   return (
@@ -9,7 +10,7 @@ function Cart() {
       <p className='text-display-lg pb-8'>My Cart</p>
       <div className='flex gap-10'>
         {/* left side */}
-        <div className='flex-1 bg-white '>
+        <div className='flex-1 '>
           {/* Select All */}
           <div className='flex items-center gap-4'>
             <Checkbox id='select-all' />
@@ -40,7 +41,7 @@ function Cart() {
             <h3>2 Items</h3>
           </div>
           <Button className='w-full' variant={'secondary'}>
-            Borrow Books
+            <Link to={'/checkout'}>Borrow Books</Link>
           </Button>
         </div>
       </div>
