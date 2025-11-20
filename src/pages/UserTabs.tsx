@@ -7,7 +7,7 @@ function UserTabs() {
   return (
     <section className='pt-12 pb-[45px]'>
       {/* tabs */}
-      <Tabs defaultValue='booklist' className=' rounded-xl '>
+      <Tabs defaultValue='profile' className=' rounded-xl '>
         <TabsList className='bg-[#F5F5F5]'>
           <TabsTrigger value='profile'>Profile</TabsTrigger>
           <TabsTrigger value='borrowedlist'>Borrowed List</TabsTrigger>
