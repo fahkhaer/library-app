@@ -8,7 +8,7 @@ function AdminTabs() {
   return (
     <section className='pt-12 pb-[45px]'>
       {/* tabs */}
-      <Tabs defaultValue='booklist' className=' rounded-xl '>
+      <Tabs defaultValue='borrowers' className=' rounded-xl '>
         <TabsList className='bg-[#F5F5F5]'>
           <TabsTrigger value='borrowers'>Borrowed List</TabsTrigger>
           <TabsTrigger value='userlist'>User</TabsTrigger>
