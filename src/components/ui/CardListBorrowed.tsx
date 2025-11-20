@@ -1,9 +1,21 @@
+import { Star } from 'lucide-react';
 import { Badge } from './badge';
 import { Button } from './button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Textarea } from './textarea';
 
 interface CardListBorrowedProps {
   variant: 'asUser' | 'asAdmin';
 }
+
+const star = 3;
 
 function CardListBorrowed({ variant }: CardListBorrowedProps) {
   return (
@@ -21,11 +33,46 @@ function CardListBorrowed({ variant }: CardListBorrowedProps) {
         </div>
       </div>
       {/* right side */}
-      <div className=' w-[182px] gap-[13px]'>
+      <div className='  gap-[13px]'>
         {variant === 'asUser' && (
-          <Button variant={'secondary'} className='w-full'>
-            <h3>Give Review</h3>
-          </Button>
+          <Dialog>
+            <DialogTrigger>
+              <Button variant={'secondary'} className='w-[182px]'>
+                <h3>Give Review</h3>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className='bg-white w-[439px]  '>
+              <DialogHeader>
+                <DialogTitle>
+                  <p className='text-display-xs font-extrabold font-quicksand'>
+                    Give Review
+                  </p>
+                </DialogTitle>
+                <DialogDescription className='text-center place-items-center'>
+                  <p className='text-md leading-8 font-extrabold font-quicksand'>
+                    Give Rating
+                  </p>
+                  <div className='flex gap-1'>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className='inline-block size-[49px] border-none text-[#FFAB0D]'
+                        stroke={i < star ? '#FFAB0D' : '#A4A7AE'}
+                        fill={i < star ? '#FFAB0D' : '#A4A7AE'}
+                      />
+                    ))}
+                  </div>
+                  <Textarea
+                    className='mt-6 md:h-[235px] resize-none border border-neutral-300 rounded-xl py-2 px-3 text-neutral-300'
+                    placeholder='Please share your thoughts about this book'
+                  />
+                </DialogDescription>
+              </DialogHeader>
+              <Button variant={'secondary'} type='submit' className=' w-full'>
+                <h3>Send</h3>
+              </Button>{' '}
+            </DialogContent>
+          </Dialog>
         )}
 
         {variant === 'asAdmin' && (
