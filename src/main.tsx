@@ -18,6 +18,7 @@ import Checkout from './pages/Checkout.tsx';
 import { Provider } from 'react-redux';
 import { store } from './redux/store.ts';
 import Success from './pages/Success.tsx';
+import AddBook from './pages/AddBook.tsx';
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path='/authors-book/:id' element={<BookByAuthor />} />
               <Route path='/cart' element={<Cart />} />
               <Route path='/checkout' element={<Checkout />} />
+              <Route path='/add-book' element={<AddBook />} />
             </Route>
           </Routes>
         </BrowserRouter>
