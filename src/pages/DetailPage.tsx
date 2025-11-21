@@ -17,12 +17,16 @@ import { Booklist, Detailbook } from '@/api/booklist';
 import ReviewersCard from '@/components/ui/ReviewersCard';
 import { Review } from '@/types/reviews';
 import { Book } from '@/types/books';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function DetailPage() {
-  const { data, isLoading, error } = Detailbook(1);
+  const { id } = useParams();
+  const bookId = Number(id);
+
+  const { data, isLoading, error } = Detailbook(bookId);
   const { data: allBooks } = Booklist();
 
+  if (!id) return <p>Invalid book ID!</p>;
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error...</p>;
 
@@ -84,7 +88,7 @@ function DetailPage() {
               <span className='text-md-semibold ml-1'>{data.rating}</span>
             </div>
 
-            <Statistics />
+            <Statistics rating={data.rating} review={data.reviewCount} />
           </div>
 
           <div className='border-t border-neutral-300'></div>
@@ -137,19 +141,25 @@ function DetailPage() {
 
       <section>
         <h1 className='mb-5 md:mb-10'>Related Books</h1>
+
         {relatedBooks.length === 0 ? (
           <h4>No related books found!</h4>
         ) : (
           <div className='flex flex-wrap gap-5'>
             {relatedBooks.map((book: Book) => (
-              <Card
+              <Link
                 key={book.id}
+                to={`/detail/${book.id}`}
                 className='w-1/2 md:w-1/4'
-                name={book.title}
-                author={book.author?.name || 'Unknown'}
-                image={book.coverImage || '/cover.png'}
-                rating={book.rating}
-              />
+              >
+                <Card
+                  className='w-full'
+                  name={book.title}
+                  author={book.author?.name || 'Unknown'}
+                  image={book.coverImage || '/cover.png'}
+                  rating={book.rating}
+                />
+              </Link>
             ))}
           </div>
         )}
@@ -161,17 +171,22 @@ function DetailPage() {
 export default DetailPage;
 
 type Statistic = {
-  data: string;
+  data: string | number;
   info: string;
 };
 
-const statistics: Statistic[] = [
-  { data: '320', info: 'Page' },
-  { data: '212', info: 'Rating' },
-  { data: '179', info: 'Reviews' },
-];
+type StatisticsProps = {
+  review: number;
+  rating: number;
+};
 
-const Statistics = () => {
+const Statistics = ({ review, rating }: StatisticsProps) => {
+  console.log(review);
+  const statistics: Statistic[] = [
+    { data: '320', info: 'Page' },
+    { data: rating, info: 'Rating' },
+    { data: review, info: 'Reviews' },
+  ];
   return (
     <div className='mt-[22px] w-full md:w-[173px] flex  items-left divide-neutral-300 flex-row divide-x'>
       {statistics.map((statistic) => (
@@ -180,7 +195,7 @@ const Statistics = () => {
           className='flex-1 max-md:w-full max-md:py-5 max-md:last:pb-0 md:pr-9 px-5 first:pl-0'
         >
           <p className='text-left text-md-bold'>{statistic.data}</p>
-          <p className='text-left text-md-medium'>{statistic.info}</p>
+          <p className='text-left text-md-medium'> {statistic.info}</p>
         </div>
       ))}
     </div>
