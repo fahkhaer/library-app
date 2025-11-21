@@ -3,12 +3,11 @@ import BookList from './BookList';
 import Borrowers from './Borrowers';
 import UserList from './UserList';
 
-
 function AdminTabs() {
   return (
     <section className='pt-12 pb-[45px]'>
       {/* tabs */}
-      <Tabs defaultValue='borrowers' className=' rounded-xl '>
+      <Tabs defaultValue='booklist' className=' rounded-xl '>
         <TabsList className='bg-[#F5F5F5]'>
           <TabsTrigger value='borrowers'>Borrowed List</TabsTrigger>
           <TabsTrigger value='userlist'>User</TabsTrigger>
@@ -16,7 +15,7 @@ function AdminTabs() {
         </TabsList>
         {/* content */}
         <TabsContent value='borrowers'>
-          <Borrowers/>
+          <Borrowers />
         </TabsContent>
         <TabsContent value='userlist'>
           <UserList />
