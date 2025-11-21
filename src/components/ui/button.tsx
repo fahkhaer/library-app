@@ -9,12 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-md font-bold  rounded-full p-2 hover:bg-primary/90',
+        default:
+          'bg-primary text-md font-bold  rounded-full p-2 hover:bg-primary/90',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
-          'border border-input text-md font-bold  rounded-full p-2 bg-background border border-[#D5D7DA] hover:bg-accent hover:text-accent-foreground',
-        secondary: 'rounded-full p-2 bg-[#1C65DA] text-md font-bold text-neutral-25 hover:bg-[#1551A8]',
+          'border border-input text-md font-bold  rounded-lg p-2 bg-background border border-[#D5D7DA] hover:bg-[#F5F5F5] hover:text-accent-foreground',
+        secondary:
+          'rounded-full p-2 bg-[#1C65DA] text-md font-bold text-neutral-25 hover:bg-[#1551A8]',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
       },
