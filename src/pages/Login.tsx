@@ -1,8 +1,11 @@
-import Container from '@/components/layout/Container';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-
+import { useLogin } from '@/api/auth';
+import { useAppDispatch } from '@/redux/store';
+import { setUser } from '@/redux/slices/authSlice';
 import {
   Form,
   FormField,
@@ -11,11 +14,10 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
-
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import Container from '@/components/layout/Container';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -24,44 +26,43 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 function Login() {
-  const form = useForm({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues: { email: '', password: '' },
   });
-
-  function onSubmit(values: FormValues) {
-    console.log(values);
-  }
-
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const loginMutation = useLogin();
+
+  const onSubmit = (values: FormValues) => {
+    loginMutation.mutate(values, {
+      onSuccess: (data) => {
+        localStorage.setItem('token', data.token);
+        dispatch(setUser(data.user));
+        navigate('/user'); // redirect setelah login
+      },
+      onError: (err) => console.error(err),
+    });
+  };
 
   return (
     <Container className='h-screen flex items-center'>
       <div className='w-full mx-auto max-w-md space-y-5'>
-        <img className='h-9' src='/logotext.png' alt='Logo-text' />
-
-        <div>
-          <h1>Login</h1>
-          <p className='text-md-semibold leading-7'>
-            Sign in to manage your library account.
-          </p>
-        </div>
-
-        {/* FORM*/}
+        <img
+          src='/logotext.png'
+          alt='logo'
+         className="h-9" 
+        />
+        <h1>Login</h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-            {/* EMAIL FIELD */}
             <FormField
               control={form.control}
               name='email'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='text-sm-bold leading-7'>
-                    Email
-                  </FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input type='email' {...field} />
                   </FormControl>
@@ -69,24 +70,23 @@ function Login() {
                 </FormItem>
               )}
             />
-
-            {/* PASSWORD FIELD */}
             <FormField
               control={form.control}
               name='password'
               render={({ field }) => (
-                <FormItem className=''>
-                  <FormLabel className='text-sm-bold leading-7'>
-                    Password
-                  </FormLabel>
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <div className='relative'>
-                      <Input type='password' {...field} className='pr-10' />
-
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        {...field}
+                        className='pr-10'
+                      />
                       <button
                         type='button'
                         onClick={() => setShowPassword(!showPassword)}
-                        className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500'
+                        className='absolute right-3 top-1/2 -translate-y-1/2'
                       >
                         {showPassword ? (
                           <EyeOff size={18} />
@@ -100,18 +100,9 @@ function Login() {
                 </FormItem>
               )}
             />
-
-            <Button variant={'secondary'} type='submit' className='w-full'>
+            <Button variant='secondary' type='submit' className='w-full'>
               Login
             </Button>
-            <div className='flex items-center gap-1 justify-center '>
-              <span className=' text-md-semibold'>
-                Don&apos;t have an account?{' '}
-              </span>{' '}
-              <Button variant='link' className='p-0'>
-                <h3 className=' text-[#1C65DA]'>Register</h3>
-              </Button>{' '}
-            </div>
           </form>
         </Form>
       </div>
