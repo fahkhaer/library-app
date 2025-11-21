@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom';
 function Cart() {
   return (
     <Container className='pb-[100px]'>
-      <p className='text-display-lg pb-8'>My Cart</p>
-      <div className='flex gap-10'>
+      <h1 className='pb-8'>My Cart</h1>
+      <div className='md:flex gap-10'>
         {/* left side */}
         <div className='flex-1 '>
           {/* Select All */}
@@ -32,9 +32,8 @@ function Cart() {
             </div>
           </div>
         </div>
-        {/* right */}
-
-        <div className='space-y-6 md:w-[318px] shadow-card p-4 bg-white rounded-2xl'>
+        {/* right desktop*/}
+        <div className='hidden md:block space-y-6 md:w-[318px] shadow-card p-4  bg-white rounded-2xl'>
           <p className='text-xl font-bold'>Loan Summary</p>
           <div className='flex justify-between'>
             <h4>Total Book</h4>
@@ -44,6 +43,16 @@ function Cart() {
             <Link to={'/checkout'}>Borrow Books</Link>
           </Button>
         </div>
+      </div>
+      {/* mobile */}
+      <div className='md:hidden border-t-2 flex justify-between fixed items-center w-full left-0 bottom-0 shadow-card p-4 bg-white '>
+        <div>
+          <h4>Total Book</h4>
+          <h3>2 Items</h3>
+        </div>
+        <Button className='w-1/2' variant={'secondary'}>
+          <Link to={'/checkout'}>Borrow Books</Link>
+        </Button>
       </div>
     </Container>
   );
