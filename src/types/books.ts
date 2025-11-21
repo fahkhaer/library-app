@@ -32,3 +32,12 @@ export type Book = {
   author: Author;
   category: Category;
 };
+
+export type AddBookForm = {
+  title: string;
+  author: string;
+  category: string;
+  pages: number;
+  description: string;
+  cover: File | null;
+};
