@@ -4,10 +4,11 @@ import Card from '@/components/ui/Card';
 import { Book } from '@/types/books';
 import { Icon } from '@iconify/react';
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function BookByAuthor() {
-  const { data, isLoading, error } = BooksByAuthor(2);
+  const { id } = useParams<{ id: string }>();
+  const { data, isLoading, error } = BooksByAuthor(Number(id));
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error...</p>;
@@ -42,21 +43,24 @@ function BookByAuthor() {
         </div>
         <h1 className='md:pb-8 md:pt-10'>Book List</h1>
       </div>
-      <Link to={'/detail/:id'}>
-        <div className='flex gap-4 md:gap-5'>
-          {data.books?.map((item: Book) => (
+      <div className='flex gap-4 md:gap-5'>
+        {data.books?.map((item: Book) => (
+          <Link
+            key={item.id}
+            to={`/detail/${item.id}`}
+            className='basis-1/2 md:basis-1/4 max-w-full'
+          >
             <Card
-              key={item.id}
               author={data.author?.name}
               rating={item.rating}
               name={item.title}
               image={item.coverImage}
-              className='basis-1/2 md:basis-1/4 max-w-full'
+              className='w-full'
               style={{ width: 'clamp(10.75rem, 28vw, 21rem)' }}
             />
-          ))}
-        </div>
-      </Link>
+          </Link>
+        ))}
+      </div>
     </Container>
   );
 }
