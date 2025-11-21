@@ -156,7 +156,7 @@ function DetailPage() {
                   className='w-full'
                   name={book.title}
                   author={book.author?.name || 'Unknown'}
-                  image={book.coverImage || '/cover.png'}
+                  image={book.coverImage || '/cover-off.png'}
                   rating={book.rating}
                 />
               </Link>
