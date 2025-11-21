@@ -18,7 +18,7 @@ function ReviewersCard({ review }: ReviewersCardProps) {
   const star = review?.star ?? 0;
 
   return (
-    <div className='bg-white flex flex-col rounded-2xl md:w-1/2 gap-4 p-4 '>
+    <div className='bg-white flex flex-col rounded-2xl w-full md:w-1/2 gap-4 p-4 '>
       {/* profile */}
       <div className='flex gap-3 h-16 items-center '>
         <Avatar className='size-16 '>
