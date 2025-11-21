@@ -140,6 +140,20 @@
       @apply text-md-medium leading-8 text-[#414651];
     }
 
+    @media (max-width: 640px) {
+      h1 {
+        @apply text-display-xs font-bold;
+      }
+
+      h2 {
+        @apply text-sm-bold;
+      }
+
+      h4 {
+        @apply text-sm-medium;
+      }
+    }
+
     /* ----------------------------------------
        UI COLORS (Override shadcn)
     ---------------------------------------- */
