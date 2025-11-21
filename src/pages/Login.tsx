@@ -40,7 +40,7 @@ function Login() {
       onSuccess: (data) => {
         localStorage.setItem('token', data.token);
         dispatch(setUser(data.user));
-        navigate('/user'); // redirect setelah login
+        navigate('/'); // redirect setelah login
       },
       onError: (err) => console.error(err),
     });
