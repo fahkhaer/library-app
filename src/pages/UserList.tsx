@@ -1,7 +1,3 @@
-import { useReactTable, getCoreRowModel } from '@tanstack/react-table';
-import { getPaginationRowModel } from '@tanstack/react-table';
-
-import { Button } from '@/components/ui/button';
 import { Command, CommandInput } from '@/components/ui/command';
 import {
   Table,
@@ -12,48 +8,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
-const data = [
-  {
-    no: 1,
-    name: 'John Doe',
-    phone: '081234567890',
-    email: 'johndoe@email.com',
-    createdAt: '28 Aug 2025, 14:00',
-  },
-];
-
-const columns = [
-  {
-    accessorKey: 'no',
-    header: 'No',
-  },
-  {
-    accessorKey: 'name',
-    header: 'Name',
-  },
-  {
-    accessorKey: 'phone',
-    header: 'Nomor Handphone',
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email',
-  },
-  {
-    accessorKey: 'createdAt',
-    header: 'Created At',
-  },
-];
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 
 function UserList() {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
-
   return (
     <section className='flex flex-col mt-6 gap-6 pb-[110px]'>
       <h1>User</h1>
@@ -67,14 +32,14 @@ function UserList() {
         </Command>
       </div>
       {/* table */}
-      <Table className=' border  bg-neutral-300   shadow-card rounded-xl overflow-hidden'>
-        <TableHeader className=''>
-          <TableRow className=''>
+      <Table className='border bg-neutral-300 shadow-card rounded-xl overflow-hidden'>
+        <TableHeader>
+          <TableRow>
             <TableHead className='md:w-11'>No</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Nomor Handphone</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Created at</TableHead>
+            <TableHead>Created At</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -82,37 +47,46 @@ function UserList() {
             <TableCell className='text-center'>1</TableCell>
             <TableCell>John Doe</TableCell>
             <TableCell>081234567890</TableCell>
-            <TableCell>johdoe@email.com</TableCell>
+            <TableCell>johndoe@email.com</TableCell>
             <TableCell>28 Aug 2025, 14:00</TableCell>
           </TableRow>
         </TableBody>
-        <TableFooter className='p-4 flex justify-between col-span-3'>
-          <p>Showing 1 to 10 of 60 entries</p>
-          {/* pagination */}
-          <div className='flex items-center justify-end  space-x-2 py-4'>
-            <div className='text-muted-foreground flex-1 text-sm'>
-              {table.getFilteredSelectedRowModel().rows.length} of{' '}
-              {table.getFilteredRowModel().rows.length} row(s) selected.
-            </div>
-            <div className='space-x-2'>
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Previous
-              </Button>
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
+
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={5} className='p-0'>
+              <div className='flex justify-between items-center px-4 py-4 text-sm text-neutral-700 bg-white'>
+                <p>Showing 1 to 10 of 60 entries</p>
+
+                <div className='flex items-center space-x-1'>
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious href='#' />
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationLink href='#'>1</PaginationLink>
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationLink href='#' isActive>
+                          2
+                        </PaginationLink>
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationLink href='#'>3</PaginationLink>
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationNext href='#' />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              </div>
+            </TableCell>
+          </TableRow>
         </TableFooter>
       </Table>
     </section>
