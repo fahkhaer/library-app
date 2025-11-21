@@ -33,7 +33,7 @@ function Home() {
   const genres =
     categoriesData?.map((item) => ({
       name: item.name || 'Unknown',
-      icon: item.name ? `/${item.name}.png` : '/image-off.png',
+      icon: item.name ? `/${item.name}.png` : '/cover-off.png',
     })) || [];
 
   return (
@@ -95,9 +95,8 @@ function Home() {
       <h1 className='font-bold text-xl mt-10 mb-5 md:text-3xl md:mb-10'>
         Popular Authors
       </h1>
-      <Link to={'/authors-book/:id'}>
-        <PopularAuthor />
-      </Link>
+
+      <PopularAuthor />
     </div>
   );
 }
