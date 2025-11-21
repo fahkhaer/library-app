@@ -11,6 +11,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Checkout() {
   const [date, setDate] = React.useState<Date | undefined>(undefined);
@@ -66,7 +67,7 @@ function Checkout() {
             <h3>Borrow Date</h3>
 
             <Popover>
-              <PopoverTrigger asChild>
+              <PopoverTrigger>
                 <div className='bg-[#F5F5F5] border border-[#D5D7DA] w-full h-12 rounded-xl py-2 px-4 flex items-center justify-between cursor-pointer'>
                   <p className='text-md font-semibold'>
                     {date ? date.toLocaleDateString() : 'Select date'}
@@ -137,7 +138,7 @@ function Checkout() {
 
           {/* Button */}
           <Button className='w-full' variant='secondary'>
-            Confirm & Borrow
+            <Link to={'/success'}>Confirm & Borrow</Link>
           </Button>
         </div>
       </div>
