@@ -9,9 +9,9 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import LoadMoreButton from '@/components/ui/LoadMoreButton';
-import { Book } from '@/types/books';
 import PopularAuthor from '@/components/ui/PopularAuthor';
 import { Link } from 'react-router-dom';
+import { useBooksWithGenre } from '@/hooks/useBooksWithGenre';
 
 function Home() {
   const {
@@ -19,12 +19,14 @@ function Home() {
     isLoading: isLoadingCategories,
     error: errorCategories,
   } = GetCategories();
-
   const {
-    data: booksData,
+    data: booksAll,
     isLoading: isLoadingBooks,
     error: errorBooks,
   } = Bookrecomendation();
+
+  const { displayedBooks, selectedGenre, setSelectedGenre, handleLoadMore } =
+    useBooksWithGenre(booksAll || []);
 
   if (isLoadingCategories || isLoadingBooks) return <p>Loading...</p>;
   if (errorCategories) return <p>Error loading categories</p>;
@@ -57,7 +59,10 @@ function Home() {
           {genres.map((item, index) => (
             <div
               key={index}
-              className='shadow-card bg-white rounded-xl flex flex-col p-3 gap-3 flex-1 min-w-[7rem] max-w-[12rem]'
+              onClick={() => setSelectedGenre(item.name)}
+              className={`shadow-card bg-white rounded-xl flex flex-col p-3 gap-3 flex-1 min-w-[7rem] max-w-[12rem] ${
+                selectedGenre === item.name ? 'border-2 border-blue-200' : ''
+              }`}
             >
               <div className='w-full bg-[#E0ECFF] rounded-xl p-3 grid place-items-center'>
                 <img className='size-12' src={item.icon} alt={item.name} />
@@ -71,7 +76,7 @@ function Home() {
       {/* Recommendation */}
       <h1 className='text-lg font-bold mb-5'>Recommendation</h1>
       <div className='flex flex-wrap gap-2 md:gap-5 w-full max-w-screen-xl mx-auto'>
-        {booksData?.map((item: Book) => (
+        {displayedBooks.map((item) => (
           <Link
             key={item.id}
             to={`/detail/${item.id}`}
@@ -87,7 +92,10 @@ function Home() {
         ))}
       </div>
 
-      <LoadMoreButton className='mt-8 mb-12' />
+      {/* Load More */}
+      <div onClick={handleLoadMore}>
+        <LoadMoreButton className='mt-8 mb-12' />
+      </div>
 
       <div className='border-t border-neutral-300'></div>
 
