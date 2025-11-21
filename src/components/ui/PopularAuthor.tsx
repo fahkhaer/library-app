@@ -10,7 +10,7 @@ function PopularAuthor() {
   if (error) return <p>Error...</p>;
 
   return (
-    <div className='flex gap-4'>
+    <div className='md:flex md:gap-4 space-y-4'>
       {authors?.map((author: Author) => (
         <div
           key={author.id}
