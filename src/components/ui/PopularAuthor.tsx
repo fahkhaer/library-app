@@ -1,7 +1,6 @@
 import { GetAuthors } from '@/api/authors';
 import { Author } from '@/types/books';
-import { Icon } from '@iconify/react';
-import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
+import AuthorCard from './AuthorCard';
 
 function PopularAuthor() {
   const { data: authors, isLoading, error } = GetAuthors();
@@ -10,34 +9,9 @@ function PopularAuthor() {
   if (error) return <p>Error...</p>;
 
   return (
-    <div className='md:flex md:gap-4 space-y-4'>
+    <div className='flex flex-col md:flex-row gap-4 flex-wrap'>
       {authors?.map((author: Author) => (
-        <div
-          key={author.id}
-          className='bg-white rounded-xl flex items-center gap-4 p-4'
-        >
-          <Avatar>
-            <AvatarImage
-              className='md:size-20 size-16 aspect-square rounded-full'
-              src='https://github.com/shadcn.png'
-              alt={author.name}
-            />
-          </Avatar>
-          <div>
-            <h2>{author.name}</h2>
-            <div className='flex gap-1.5 items-center'>
-              <Icon
-                icon='material-symbols:book'
-                width='16'
-                height='20'
-                style={{ color: '#1C65DA' }}
-              />
-              <p className='text-[#0A0D12] text-sm-medium md:text-md-medium'>
-                5 books
-              </p>
-            </div>
-          </div>
-        </div>
+        <AuthorCard key={author.id} author={author} />
       ))}
     </div>
   );
