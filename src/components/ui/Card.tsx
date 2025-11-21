@@ -13,7 +13,7 @@ type CardProps = {
 function Card({ className, name, author, image, rating, style }: CardProps) {
   return (
     <div className={cn('rounded-xl', className)} style={style}>
-      <img src={image || '/cover.png'} alt='book-cover' />
+      <img src={image || '/cover-off.png'} alt='book-cover' />
       <div className='p-3 md:p-4 space-y-0.5 md:space-y-1'>
         <h2>{name}</h2>
         <h4>{author}</h4>
