@@ -11,7 +11,7 @@ function LoadMoreButton({ className }: LoadMoreButtonProps) {
       className={cn(
         'mx-auto p-2 rounded-full flex items-center justify-center text-md-bold leading-7',
         'border border-neutral-300 hover:bg-neutral-400',
-        'md:w-[200px] ',
+        'md:w-[200px] w-full',
         className
       )}
     >
