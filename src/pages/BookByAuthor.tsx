@@ -33,7 +33,9 @@ function BookByAuthor() {
                   height='20'
                   style={{ color: '#1C65DA' }}
                 />
-                <p className='text-[#0A0D12]'>{data.books.length} books</p>
+                <p className='text-[#0A0D12] text-sm-medium md:text-md-medium'>
+                  {data.books.length} books
+                </p>
               </div>
             </div>
           </div>
@@ -41,7 +43,7 @@ function BookByAuthor() {
         <h1 className='md:pb-8 md:pt-10'>Book List</h1>
       </div>
       <Link to={'/detail/:id'}>
-        <div className='flex w-full gap-5 flex-wrap'>
+        <div className='flex gap-4 md:gap-5'>
           {data.books?.map((item: Book) => (
             <Card
               key={item.id}
@@ -49,7 +51,8 @@ function BookByAuthor() {
               rating={item.rating}
               name={item.title}
               image={item.coverImage}
-              className='w-1/4'
+              className='basis-1/2 md:basis-1/4 max-w-full'
+              style={{ width: 'clamp(10.75rem, 28vw, 21rem)' }}
             />
           ))}
         </div>

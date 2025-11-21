@@ -11,87 +11,86 @@ import LoadMoreButton from '@/components/ui/LoadMoreButton';
 import { Book } from '@/types/books';
 import PopularAuthor from '@/components/ui/PopularAuthor';
 import { Link } from 'react-router-dom';
-import { GetCategories } from '@/api/categories';
+// import { GetCategories } from '@/api/categories';
 
 function Home() {
+  // const {
+  //   data: categoriesData,
+  //   isLoading: isLoadingCategories,
+  //   error: errorCategories,
+  // } = GetCategories();
 
-  const {
-    data: categoriesData,
-    isLoading: isLoadingCategories,
-    error: errorCategories,
-  } = GetCategories();
-
-  if (isLoadingCategories) return <p>Loading...</p>;
-  if (errorCategories) return <p>Error...</p>;
+  // if (isLoadingCategories) return <p>Loading...</p>;
+  // if (errorCategories) return <p>Error...</p>;
 
   const { data, isLoading, error } = Bookrecomendation();
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error...</p>;
 
-  const genres = categoriesData?.map((item) => ({
-    name: item.name,
-    icon: item.name ? `/${item.name}.png` : 'image-off.png',
-  }));
+  // const genres = categoriesData?.map((item) => ({
+  //   name: item.name,
+  //   icon: item.name ? `/${item.name}.png` : 'image-off.png',
+  // }));
 
   return (
     <>
-      <div className=' md:pb-[116px] md:pt-12'>
+      <div className='pb-16 pt-6 md:pt-12 md:pb-[116px]'>
         <Carousel>
           <CarouselContent>
             {Array.from({ length: 5 }).map((_, index) => (
               <CarouselItem key={index}>
-                <div>
-                  <img
-                    style={{ width: 'clamp(22.56rem, 100vw, 75rem)' }}
-                    src='/hero.png'
-                  ></img>
-                </div>
+                <img className='w-full' src='/hero.png' />
               </CarouselItem>
             ))}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-        {/* genres */}
-        <div className='flex  justify-around gap-3'>
-          {genres?.map((item, index) => (
-            <div
-              key={index}
-              className='shadow-card my-12 bg-white rounded-xl w-full  flex flex-col p-3 gap-3'
-            >
-              <div className='w-[163px] place-items-center bg-[#E0ECFF] center rounded-xl p-[6.4px] gap-3'>
-                <img className='size-[51.2px]' src={item.icon}></img>
-              </div>
-              <p className='text-md-semibold leading-8'>{item.name}</p>
-            </div>
-          ))}
-        </div>
 
-        {/* recomendation */}
-        <h1>Recomendation</h1>
-        <div className='flex pt-5 gap-5'>
-          {data.map((item: Book) => (
-            <Link key={item.id} to={`/detail/${item.id}`} className='md:w-1/5'>
+        {/* {genres && (
+          <div className="grid grid-cols-3 gap-3 my-10">
+            {genres.map((item, index) => (
+              <div
+                key={index}
+                className="shadow-card bg-white rounded-xl flex flex-col p-3 gap-3"
+              >
+                <div className="w-full bg-[#E0ECFF] rounded-xl p-3 grid place-items-center">
+                  <img className="size-12" src={item.icon} />
+                </div>
+                <p className="text-sm font-semibold text-center">
+                  {item.name}
+                </p>
+              </div>
+            ))}
+          </div>
+        )} */}
+
+        <h1 className='text-lg font-bold'>Recommendation</h1>
+
+        <div className='flex flex-wrap gap-2 md:gap-5 w-full max-w-screen-xl justify-around mx-auto'>
+          {data?.map((item: Book) => (
+            <Link key={item.id} to={`/detail/${item.id}`}>
               <Card
-                className='w-full'
                 name={item.title}
                 author={item.author.name}
                 image={item.coverImage}
                 rating={item.rating}
+                className='basis-1/2 md:basis-1/4'
+                style={{ width: 'clamp(9rem, 18vw, 16rem)' }}
               />
             </Link>
           ))}
         </div>
 
-        <LoadMoreButton className='md:mt-10 md:mb-12' />
+        <LoadMoreButton className='mt-8 mb-12' />
 
         <div className='border-t border-neutral-300'></div>
-        {/* Popular Authors */}
-        <h1 className='md:font-bold md:text-3xl md:mb-10 md:mt-12'>
+
+        <h1 className='font-bold text-xl mt-10 mb-5 md:text-3xl md:mb-10'>
           Popular Authors
         </h1>
-        {/* author card */}
+
         <Link to={'/authors-book/:id'}>
           <PopularAuthor />
         </Link>

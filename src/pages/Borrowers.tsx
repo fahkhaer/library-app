@@ -11,7 +11,7 @@ function Borrowers() {
         <h1>Borrowed List</h1>
 
         {/* search bar */}
-        <div className='w-[600px]'>
+        <div className='w-full md:w-[600px]'>
           <Command className='h-12 rounded-full justify-center border border-neutral-300 gap-2 px-4 md:min-w-[500px]'>
             <CommandInput
               className='text-neutral-600 text-sm '

@@ -20,7 +20,7 @@ function Checkout() {
     <Container className='pb-[100px]'>
       <h1 className='pb-8 text-display-lg'>Checkout</h1>
 
-      <div className='flex gap-10'>
+      <div className='md:flex gap-10'>
         {/* left side */}
         <div className='flex-1 space-y-8 divide-y divide-neutral-300 '>
           <div className='flex flex-col gap-4'>
@@ -63,7 +63,7 @@ function Checkout() {
           <p className='text-xl font-bold'>Complete Your Borrow Request</p>
 
           {/* Borrow Date */}
-          <div className='space-y-2'>
+          <div className='flex flex-col space-y-2'>
             <h3>Borrow Date</h3>
 
             <Popover>

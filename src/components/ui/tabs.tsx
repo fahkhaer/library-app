@@ -12,7 +12,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      'inline-flex gap-2 md:w-[557px] items-center justify-center rounded-md bg-muted p-2 text-muted-foreground',
+      'inline-flex gap-2 w-full md:w-[557px] items-center justify-center rounded-md bg-muted p-2 text-muted-foreground',
       className
     )}
     {...props}
@@ -32,7 +32,7 @@ const TabsTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       variant === 'default' &&
-        'inline-flex md:min-w-[175px] md:h-14 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-md text-[#535862] ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:font-bold data-[state=active]:text-foreground data-[state=active]:shadow-sm',
+        'inline-flex w-full md:min-w-[175px] md:h-14 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-md text-[#535862] ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:font-bold data-[state=active]:text-foreground data-[state=active]:shadow-sm',
 
       variant === 'secondary' &&
         'inline-flex items-center justify-center md:h-10 border-[#D5D7DA] px-4 py-2 rounded-full border text-neutral-950 md:text-md-semibold transition-all whitespace-nowrap ' +

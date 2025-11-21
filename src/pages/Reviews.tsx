@@ -6,11 +6,11 @@ function Reviews() {
   const star = 3;
 
   return (
-    <section className='flex flex-col mt-6 gap-6 pb-[110px]'>
+    <section className='flex flex-col mt-4 md:mt-6 gap-6 md:pb-[110px]'>
       <h1>Book List</h1>
 
       {/* search bar */}
-      <div className='w-[600px]'>
+      <div className='w-full md:w-[600px]'>
         <Command className='h-12 rounded-full justify-center border border-neutral-300 gap-2 px-4 md:min-w-[500px]'>
           <CommandInput
             className='text-neutral-600 text-sm '
@@ -20,7 +20,7 @@ function Reviews() {
       </div>
       {/* tabs and content */}
       <div className='shadow-card divide-neutral-300 divide-y bg-white rounded-2xl p-5 space-y-5'>
-        <p className='text-md-semibold'> 25 August 2025, 13:38 </p>
+        <p className='text-sm-semibold md:text-md-semibold'> 25 August 2025, 13:38 </p>
         <div className='pt-5'>
           <CardList />
         </div>
@@ -36,7 +36,7 @@ function Reviews() {
             ))}
           </div>
           {/* comment */}
-          <p className='text-md-semibold'>
+          <p className='text-sm-semibold md:text-md-semibold'>
             Lorem ipsum dolor sit amet consectetur. Pulvinar porttitor aliquam
             viverra nunc sed facilisis. Integer tristique nullam morbi mauris
             ante.

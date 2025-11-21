@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import CardListUser from '@/components/ui/CardListUser';
 import { Command, CommandInput } from '@/components/ui/command';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 
@@ -17,7 +18,7 @@ function BookList() {
         </Button>
       </Link>
       {/* search bar */}
-      <div className='w-[600px]'>
+      <div className='w-full md:w-[600px]'>
         <Command className='h-12 rounded-full justify-center border border-neutral-300 gap-2 px-4 md:min-w-[500px]'>
           <CommandInput
             className='text-neutral-600 text-sm '
@@ -27,7 +28,29 @@ function BookList() {
       </div>
       {/* tabs and content */}
       <Tabs defaultValue='all'>
-        <TabsList className='w-fit justify-start gap-3'>
+        {/* mobile*/}
+        <ScrollArea className='w-full whitespace-nowrap md:hidden'>
+          <TabsList className='flex w-max gap-3'>
+            <TabsTrigger variant='secondary' value='all'>
+              All
+            </TabsTrigger>
+            <TabsTrigger variant='secondary' value='available'>
+              Available
+            </TabsTrigger>
+            <TabsTrigger variant='secondary' value='borrowed'>
+              Borrowed
+            </TabsTrigger>
+            <TabsTrigger variant='secondary' value='returned'>
+              Returned
+            </TabsTrigger>
+            <TabsTrigger variant='secondary' value='damaged'>
+              Damaged
+            </TabsTrigger>
+          </TabsList>
+        </ScrollArea>
+
+        {/* desktop */}
+        <TabsList className='hidden md:flex md:w-fit gap-3'>
           <TabsTrigger variant='secondary' value='all'>
             All
           </TabsTrigger>

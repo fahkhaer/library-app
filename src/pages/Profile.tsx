@@ -9,7 +9,7 @@ function Profile() {
   if (isLoading || !user) return <p> Loading...</p>;
 
   return (
-    <section className='flex flex-col mt-6 gap-6 pb-[110px]'>
+    <section className='flex flex-col mt-4 md:mt-6 gap-6 pb-[110px]'>
       <h1>Profile</h1>
       <div className='shadow-card p-5 md:w-[557px] rounded-2xl bg-white'>
         <div className='space-y-3'>

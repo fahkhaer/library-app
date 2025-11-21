@@ -18,7 +18,7 @@ function PopularAuthor() {
         >
           <Avatar>
             <AvatarImage
-              className='size-20 rounded-full'
+              className='md:size-20 size-16 aspect-square rounded-full'
               src='https://github.com/shadcn.png'
               alt={author.name}
             />
@@ -32,7 +32,9 @@ function PopularAuthor() {
                 height='20'
                 style={{ color: '#1C65DA' }}
               />
-              <p className='text-[#0A0D12]'>5 books</p>
+              <p className='text-[#0A0D12] text-sm-medium md:text-md-medium'>
+                5 books
+              </p>
             </div>
           </div>
         </div>
