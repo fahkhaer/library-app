@@ -10,14 +10,36 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Textarea } from './textarea';
+import { AddReview } from '@/api/reviews';
+import { useState } from 'react';
 
 interface CardListBorrowedProps {
   variant: 'asUser' | 'asAdmin';
 }
 
-const star = 3;
-
 function CardListBorrowed({ variant }: CardListBorrowedProps) {
+  const addReview = AddReview();
+  const [star, setStar] = useState(0);
+  const [comment, setComment] = useState('');
+
+  const handleSubmit = () => {
+    addReview.mutate(
+      {
+        bookId: 1, //nanti mau ku ubah berdasrakan get my loans
+        star: star,
+        comment: comment,
+      },
+      {
+        onSuccess: (data) => {
+          console.log('Berhasil:', data);
+        },
+        onError: (err) => {
+          console.log('Error:', err);
+        },
+      }
+    );
+  };
+
   return (
     <div className='flex justify-between pb-5 rounded-2xl bg-white items-center space-y-4'>
       {/* left side */}
@@ -56,19 +78,27 @@ function CardListBorrowed({ variant }: CardListBorrowedProps) {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className='inline-block size-[49px] border-none text-[#FFAB0D]'
+                        onClick={() => setStar(i + 1)} // ⬅️ cara setStar
+                        className='inline-block size-[49px] cursor-pointer'
                         stroke={i < star ? '#FFAB0D' : '#A4A7AE'}
                         fill={i < star ? '#FFAB0D' : '#A4A7AE'}
                       />
                     ))}
                   </div>
                   <Textarea
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
                     className='mt-6 md:h-[235px] resize-none border border-neutral-300 rounded-xl py-2 px-3 text-neutral-300'
                     placeholder='Please share your thoughts about this book'
                   />
                 </DialogDescription>
               </DialogHeader>
-              <Button variant={'secondary'} type='submit' className=' w-full'>
+              <Button
+                onClick={handleSubmit}
+                variant={'secondary'}
+                type='submit'
+                className=' w-full'
+              >
                 <h3>Send</h3>
               </Button>{' '}
             </DialogContent>
