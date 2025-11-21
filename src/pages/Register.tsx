@@ -16,18 +16,34 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRegister } from '@/api/auth';
 
-const formSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  phone: z.string().min(10).max(14),
-  password: z.string().min(6),
-  passwordconfirmation: z.string().min(6),
-});
+// FORM SCHEMA
+const formSchema = z
+  .object({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Invalid email'),
+    phone: z.string().min(10, 'Too short').max(14, 'Too long'),
+    password: z.string().min(6, 'Min 6 characters'),
+    passwordconfirmation: z.string().min(6, 'Min 6 characters'),
+  })
+  .refine((data) => data.password === data.passwordconfirmation, {
+    message: 'Passwords do not match',
+    path: ['passwordconfirmation'],
+  });
+
 type FormValues = z.infer<typeof formSchema>;
 
+// REGISTER COMPONENT
 function Register() {
-  const form = useForm({
+  const navigate = useNavigate();
+  const registerMutation = useRegister();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -38,11 +54,24 @@ function Register() {
     },
   });
 
+  // SUBMIT HANDLER
   function onSubmit(values: FormValues) {
-    console.log(values);
-  }
+    const payload = {
+      name: values.name,
+      email: values.email,
+      phone: values.phone,
+      password: values.password,
+    };
 
-  const [showPassword, setShowPassword] = useState(false);
+    registerMutation.mutate(payload, {
+      onSuccess: () => {
+        navigate('/login');
+      },
+      onError: (err) => {
+        console.error('REGISTER ERROR:', err);
+      },
+    });
+  }
 
   return (
     <Container className='h-screen flex items-center'>
@@ -50,8 +79,8 @@ function Register() {
         <img className='h-9' src='/logotext.png' alt='Logo-text' />
 
         <div>
-          <h1>Register</h1>
-          <p className='text-md-semibold leading-7'>
+          <h1 className='text-xl font-bold'>Register</h1>
+          <p className='text-md-semibold leading-7 text-gray-600'>
             Create your account to start borrowing books.
           </p>
         </div>
@@ -59,15 +88,15 @@ function Register() {
         {/* FORM*/}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-            {/* NAME FIELD */}
+            {/* NAME */}
             <FormField
               control={form.control}
               name='name'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='text-sm-bold leading-7'>Name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input type='name' {...field} />
+                    <Input {...field} placeholder='Your name' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -79,11 +108,13 @@ function Register() {
               name='email'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='text-sm-bold leading-7'>
-                    Email
-                  </FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type='email' {...field} />
+                    <Input
+                      type='email'
+                      {...field}
+                      placeholder='your@mail.com'
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -95,11 +126,9 @@ function Register() {
               name='phone'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='text-sm-bold leading-7'>
-                    Nomor Handphone
-                  </FormLabel>
+                  <FormLabel>Nomor Handphone</FormLabel>
                   <FormControl>
-                    <Input type='phone' {...field} />
+                    <Input type='text' {...field} placeholder='0812xxxxxx' />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -110,14 +139,15 @@ function Register() {
               control={form.control}
               name='password'
               render={({ field }) => (
-                <FormItem className=''>
-                  <FormLabel className='text-sm-bold leading-7'>
-                    Password
-                  </FormLabel>
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <div className='relative'>
-                      <Input type='password' {...field} className='pr-10' />
-
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        {...field}
+                        className='pr-10'
+                      />
                       <button
                         type='button'
                         onClick={() => setShowPassword(!showPassword)}
@@ -140,28 +170,21 @@ function Register() {
               control={form.control}
               name='passwordconfirmation'
               render={({ field }) => (
-                <FormItem className=''>
-                  <FormLabel className='text-sm-bold leading-7'>
-                    Confirm Password
-                  </FormLabel>
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
                     <div className='relative'>
                       <Input
-                        type='passwordconfirmation'
+                        type={showConfirm ? 'text' : 'password'}
                         {...field}
                         className='pr-10'
                       />
-
                       <button
                         type='button'
-                        onClick={() => setShowPassword(!showPassword)}
+                        onClick={() => setShowConfirm(!showConfirm)}
                         className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500'
                       >
-                        {showPassword ? (
-                          <EyeOff size={18} />
-                        ) : (
-                          <Eye size={18} />
-                        )}
+                        {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
                       </button>
                     </div>
                   </FormControl>
@@ -170,15 +193,23 @@ function Register() {
               )}
             />
 
-            <Button variant={'secondary'} type='submit' className='w-full'>
-              Submit
+            {/* SUBMIT BUTTON */}
+            <Button
+              variant='secondary'
+              type='submit'
+              className='w-full'
+              disabled={registerMutation.isPending}
+            >
+              {registerMutation.isPending ? 'Loading...' : 'Submit'}
             </Button>
-            <div className='flex items-center gap-1 justify-center '>
-              <span className=' text-md-semibold'>
-                Already have an account?{' '}
-              </span>{' '}
+
+            {/* LOGIN LINK */}
+            <div className='flex items-center gap-1 justify-center'>
+              <span>Already have an account?</span>
               <Button variant='link' className='p-0'>
-                <h3 className=' text-[#1C65DA]'>Log In</h3>
+                <Link to='/login'>
+                  <span className='text-[#1C65DA]'>Log In</span>
+                </Link>
               </Button>
             </div>
           </form>
