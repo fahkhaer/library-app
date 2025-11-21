@@ -9,22 +9,22 @@ type Icon = {
 export const socialMediaData: Icon[] = [
   {
     href: 'https://www.facebook.com/',
-    src: '/icons/icon-facebook.svg',
+    src: '/icons/icon-facebook.png',
     alt: 'Facebook',
   },
   {
     href: 'https://www.instagram.com/',
-    src: '/icons/icon-instagram.svg',
+    src: '/icons/icon-instagram.png',
     alt: 'Instagram',
   },
   {
     href: 'https://www.linkedin.com/',
-    src: '/icons/icon-linkedin.svg',
+    src: '/icons/icon-linkedin.png',
     alt: 'LinkedIn',
   },
   {
     href: 'https://www.tiktok.com/',
-    src: '/icons/icon-tiktok.svg',
+    src: '/icons/icon-tiktok.png',
     alt: 'Tiktok',
   },
 ];

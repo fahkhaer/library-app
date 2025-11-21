@@ -19,6 +19,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store.ts';
 import Success from './pages/Success.tsx';
 import AddBook from './pages/AddBook.tsx';
+import Preview from './pages/Preview.tsx';
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path='/cart' element={<Cart />} />
               <Route path='/checkout' element={<Checkout />} />
               <Route path='/add-book' element={<AddBook />} />
+              <Route path='/preview-book/:id' element={<Preview />} />
             </Route>
           </Routes>
         </BrowserRouter>
