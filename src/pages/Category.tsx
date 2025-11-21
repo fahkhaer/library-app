@@ -1,11 +1,22 @@
+import { Booklist } from '@/api/booklist';
 import { GetCategories } from '@/api/categories';
 import Container from '@/components/layout/Container';
 import Card from '@/components/ui/Card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Book } from '@/types/books';
 import { Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 function Category() {
   const { data, isLoading, error } = GetCategories();
+  const {
+    data: booklist,
+    isLoading: isLoadingBooks,
+    error: errorBooks,
+  } = Booklist();
+
+  if (isLoadingBooks) return <p>Loading Books...</p>;
+  if (errorBooks) return <p>Error...</p>;
 
   return (
     <Container className='flex gap-5 md:pb-[97px]'>
@@ -54,9 +65,18 @@ function Category() {
         </div>
       </section>
       {/* kanan */}
-      <div className='flex flex-wrap w-full gap-2.5'>
-        <Card className='w-1/4' />
-      </div>
+      <section className='grid grid-cols-2 md:grid-cols-4 gap-4 w-full'>
+        {booklist?.map((item: Book, i: number) => (
+          <Link key={i} to={`/detail/${item.id}`} className='block'>
+            <Card
+              name={item.title}
+              author={item.author.name}
+              image={item.coverImage}
+              rating={item.rating}
+            />
+          </Link>
+        ))}
+      </section>
     </Container>
   );
 }
