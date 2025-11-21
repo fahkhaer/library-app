@@ -11,3 +11,13 @@ export function GetAuthors() {
     },
   });
 }
+
+export function BooksByAuthor(id: number) {
+  return useQuery({
+    queryKey: ['booksbyauthor', id],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}/api/authors/${id}/books`);
+      return res.data.data;
+    },
+  });
+}
