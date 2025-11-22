@@ -35,9 +35,12 @@ export type Book = {
 
 export type AddBookForm = {
   title: string;
-  author: string;
-  category: string;
-  pages: number;
   description: string;
-  cover: File | null;
+  isbn: string;
+  publishedYear: number;
+  coverImage: string;
+  authorId: number;
+  categoryId: number;
+  totalCopies: number;
+  availableCopies: number;
 };
