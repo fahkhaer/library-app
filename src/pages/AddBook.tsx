@@ -11,17 +11,27 @@ import {
 import Container from '@/components/layout/Container';
 import { ArrowLeft, CloudUpload } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
-import { AddBookForm } from '@/types/books';
+import { AddBookForm, Author, Category } from '@/types/books';
 import { Link } from 'react-router-dom';
+import { AddApiBook } from '@/api/admin/books';
+import { GetCategories } from '@/api/user/categories';
+import { GetAuthors } from '@/api/user/authors';
 
 function AddBook() {
+  const addBook = AddApiBook();
+  const { data: categoriesData } = GetCategories();
+  const {data: authorsData } = GetAuthors()
+
   const [form, setForm] = useState<AddBookForm>({
     title: '',
-    author: '',
-    category: '',
-    pages: 0,
     description: '',
-    cover: null,
+    isbn: '',
+    publishedYear: 0,
+    coverImage: '',
+    authorId: 0,
+    categoryId: 0,
+    totalCopies: 0,
+    availableCopies: 0,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -30,20 +40,43 @@ function AddBook() {
     const err: Record<string, string> = {};
 
     if (!form.title) err.title = 'Title is required';
-    if (!form.author) err.author = 'Author is required';
-    if (!form.category) err.category = 'Category is required';
-    if (!form.pages || form.pages <= 0)
-      err.pages = 'Number of pages must be > 0';
+    if (!form.authorId) err.authorId = 'Author is required';
+    if (!form.categoryId) err.category = 'Category is required';
+    // if (!form.pages || form.pages <= 0)
+    // err.pages = 'Number of pages must be > 0';
     if (!form.description) err.description = 'Description is required';
-    if (!form.cover) err.cover = 'Cover image is required';
+    // if (!form.cover) err.cover = 'Cover image is required';
 
     setErrors(err);
     return Object.keys(err).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
+    console.log(form);
+
+    addBook.mutate(
+      {
+        title: form.title,
+        description: form.description,
+        isbn: 'gfjfgjkugv',
+        publishedYear: 2000,
+        coverImage: 'string',
+        authorId: form.authorId,
+        categoryId: form.categoryId,
+        totalCopies: 1,
+        availableCopies: 1,
+      },
+      {
+        onSuccess: (data) => {
+          console.log('Berhasil:', data);
+        },
+        onError: (err) => {
+          console.log('Error:', err);
+        },
+      }
+    );
 
     console.log('READY TO SEND:', form);
   };
@@ -51,7 +84,7 @@ function AddBook() {
   return (
     <Container className='py-4'>
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmitForm}
         className='w-full mx-auto max-w-[592px] space-y-4'
       >
         <div className='flex gap-4 items-center'>
@@ -81,14 +114,25 @@ function AddBook() {
           {/* Author */}
           <div>
             <label className='block mb-1 text-sm font-bold'>Author</label>
-            <Input
-              type='text'
-              value={form.author}
-              onChange={(e) => setForm({ ...form, author: e.target.value })}
-              className='h-12 border-neutral-300 rounded-xl px-4'
-            />
-            {errors.author && (
-              <p className='text-[#EE1D52] text-sm-medium'>{errors.author}</p>
+          <Select
+              onValueChange={(value) =>
+                setForm({ ...form, authorId: Number(value) })
+              }
+            >
+              <SelectTrigger className='h-12 border-neutral-300 rounded-xl py-2 px-4'>
+                <SelectValue placeholder='Select Author' />
+              </SelectTrigger>
+
+              <SelectContent className='bg-white'>
+                {authorsData?.map((cat: Author) => (
+                  <SelectItem key={cat.id} value={String(cat.id)}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.authorId && (
+              <p className='text-[#EE1D52] text-sm-medium'>{errors.authorId}</p>
             )}
           </div>
 
@@ -96,26 +140,30 @@ function AddBook() {
           <div>
             <label className='block mb-1 text-sm font-bold'>Category</label>
             <Select
-              onValueChange={(value) => setForm({ ...form, category: value })}
+              onValueChange={(value) =>
+                setForm({ ...form, categoryId: Number(value) })
+              }
             >
               <SelectTrigger className='h-12 border-neutral-300 rounded-xl py-2 px-4'>
                 <SelectValue placeholder='Select Category' />
               </SelectTrigger>
 
               <SelectContent className='bg-white'>
-                <SelectItem value='fiction'>Fiction</SelectItem>
-                <SelectItem value='nonfiction'>Non-Fiction</SelectItem>
-                <SelectItem value='fantasy'>Fantasy</SelectItem>
-                <SelectItem value='biography'>Biography</SelectItem>
+                {categoriesData?.map((cat: Category) => (
+                  <SelectItem key={cat.id} value={String(cat.id)}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
+
             {errors.category && (
               <p className='text-[#EE1D52] text-sm-medium'>{errors.category}</p>
             )}
           </div>
 
           {/* Pages */}
-          <div>
+          {/* <div>
             <label className='block mb-1 text-sm font-bold'>
               Number of Pages
             </label>
@@ -130,7 +178,7 @@ function AddBook() {
             {errors.pages && (
               <p className='text-[#EE1D52] text-sm-medium'>{errors.pages}</p>
             )}
-          </div>
+          </div> */}
 
           {/* Description */}
           <div>
@@ -168,7 +216,7 @@ function AddBook() {
               </p>
               <p className='text-sm-semibold '>PNG or JPG (max. 5mb)</p>
             </label>
-
+{/* 
             <input
               id='cover'
               type='file'
@@ -177,7 +225,7 @@ function AddBook() {
               onChange={(e) =>
                 setForm({ ...form, cover: e.target.files?.[0] || null })
               }
-            />
+            /> */}
 
             {errors.cover && (
               <p className='text-[#EE1D52] text-sm-medium'>{errors.cover}</p>
