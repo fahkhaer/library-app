@@ -2,14 +2,13 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 import { Menu, Search } from 'lucide-react';
-
 import { Icon } from '@iconify/react';
 import { Badge } from '@/components/ui/badge';
 
 function NavbarGuest() {
   return (
     <div
-      className='flex font-quicksand h-20 px-4 lg:px-[120px] justify-between shadow-[0_0_20px_0_#CBCACA40]
+      className='flex font-quicksand h-20 px-4 md:px-[120px] justify-between shadow-[0_0_20px_0_#CBCACA40]
 items-center'
     >
       <Link to={'/'}>
