@@ -13,7 +13,7 @@ import Container from '@/components/layout/Container';
 import { Share2, Star } from 'lucide-react';
 import LoadMoreButton from '@/components/ui/LoadMoreButton';
 import Card from '@/components/ui/Card';
-import { Booklist, Detailbook } from '@/api/booklist';
+import { Booklist, Detailbook } from '@/api/user/booklist';
 import ReviewersCard from '@/components/ui/ReviewersCard';
 import { Review } from '@/types/reviews';
 import { Book } from '@/types/books';

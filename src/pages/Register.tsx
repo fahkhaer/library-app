@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRegister } from '@/api/auth';
+import { useRegister } from '@/api/user/auth';
 
 // FORM SCHEMA
 const formSchema = z

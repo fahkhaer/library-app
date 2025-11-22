@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { useFetchUser } from '@/api/auth';
+import { useFetchUser } from '@/api/user/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 function Profile() {

@@ -1,4 +1,4 @@
-import { GetAuthors } from '@/api/authors';
+import { GetAuthors } from '@/api/user/authors';
 import { Author } from '@/types/books';
 import AuthorCard from './AuthorCard';
 

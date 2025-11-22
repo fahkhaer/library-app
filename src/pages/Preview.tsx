@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import Container from '@/components/layout/Container';
 import { ArrowLeft, Share2, Star } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
-import { Detailbook } from '@/api/booklist';
+import { Detailbook } from '@/api/user/booklist';
 
 function Preview() {
   const { id } = useParams();

@@ -1,5 +1,5 @@
 import Container from '@/components/layout/Container';
-import { BooksByAuthor } from '@/api/authors';
+import { BooksByAuthor } from '@/api/user/authors';
 import Card from '@/components/ui/Card';
 import { Book } from '@/types/books';
 import { Icon } from '@iconify/react';

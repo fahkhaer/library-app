@@ -1,4 +1,4 @@
-import { Detailbook } from '@/api/booklist';
+import { Detailbook } from '@/api/user/booklist';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Star } from 'lucide-react';
 import dayjs from 'dayjs';

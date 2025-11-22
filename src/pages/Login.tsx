@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useLogin } from '@/api/auth';
+import { useLogin } from '@/api/user/auth';
 import { useAppDispatch } from '@/redux/store';
 import { setUser } from '@/redux/slices/authSlice';
 import {
@@ -40,7 +40,7 @@ function Login() {
       onSuccess: (data) => {
         localStorage.setItem('token', data.token);
         dispatch(setUser(data.user));
-        navigate('/'); // redirect setelah login
+        navigate('/');
       },
       onError: (err) => console.error(err),
     });
@@ -49,11 +49,7 @@ function Login() {
   return (
     <Container className='h-screen flex items-center'>
       <div className='w-full mx-auto max-w-md space-y-5'>
-        <img
-          src='/logotext.png'
-          alt='logo'
-         className="h-9" 
-        />
+        <img src='/logotext.png' alt='logo' className='h-9' />
         <h1>Login</h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>

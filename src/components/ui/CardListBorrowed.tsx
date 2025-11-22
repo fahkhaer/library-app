@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Textarea } from './textarea';
-import { AddReview } from '@/api/reviews';
+import { AddReview } from '@/api/user/reviews';
 import { useState } from 'react';
 
 interface CardListBorrowedProps {
@@ -118,7 +118,9 @@ function CardListBorrowed({ variant }: CardListBorrowedProps) {
 
         {variant === 'asAdmin' && (
           <div>
-            <p className='text-sm-semibold md:text-md-semibold'>borrower&apos;s name</p>
+            <p className='text-sm-semibold md:text-md-semibold'>
+              borrower&apos;s name
+            </p>
             <p className='md:text-xl md:font-bold text-md-semibold'>John Doe</p>
           </div>
         )}
