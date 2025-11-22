@@ -37,7 +37,6 @@ export const useDeleteBook = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      console.log(res);
 
       return res.data;
     },

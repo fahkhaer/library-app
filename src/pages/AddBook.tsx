@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,14 +16,17 @@ import { Link, useParams } from 'react-router-dom';
 import { AddApiBook, EditBook } from '@/api/admin/books';
 import { GetCategories } from '@/api/user/categories';
 import { GetAuthors } from '@/api/user/authors';
+import { Detailbook } from '@/api/user/booklist';
 
 function AddBook() {
   const { id } = useParams();
+  const bookId = Number(id);
 
   const addBook = AddApiBook();
   const editBook = EditBook();
   const { data: categoriesData } = GetCategories();
   const { data: authorsData } = GetAuthors();
+  const { data: detailBookData, isLoading, error } = Detailbook(bookId);
 
   const [form, setForm] = useState<AddBookForm>({
     title: '',
@@ -62,7 +65,7 @@ function AddBook() {
       {
         title: form.title,
         description: form.description,
-        isbn: 'gfjfgjkugv',
+        isbn: 'fgjkugv',
         publishedYear: 2000,
         coverImage: 'string',
         authorId: form.authorId,
@@ -85,7 +88,7 @@ function AddBook() {
   const handleEdit = () => {
     editBook.mutate(
       {
-        id: Number(id),
+        id: bookId,
         payload: {
           title: form.title,
           description: form.description,
@@ -108,11 +111,36 @@ function AddBook() {
       }
     );
   };
+  useEffect(() => {
+    if (id && detailBookData) {
+      setForm({
+        title: detailBookData.title,
+        description: detailBookData.description,
+        isbn: detailBookData.isbn,
+        publishedYear: detailBookData.publishedYear,
+        coverImage: detailBookData.coverImage,
+        authorId: detailBookData.authorId,
+        categoryId: detailBookData.categoryId,
+        totalCopies: detailBookData.totalCopies,
+        availableCopies: detailBookData.availableCopies,
+      });
+    }
+  }, [id, detailBookData]);
+
+  if (isLoading && id) return <p>Loading...</p>;
+  if (error && id) return <p>Error...</p>;
 
   return (
     <Container className='py-4'>
       <form
-        onSubmit={id ? handleEdit : handleSubmitForm}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (id) {
+            handleEdit();
+          } else {
+            handleSubmitForm(e);
+          }
+        }}
         className='w-full mx-auto max-w-[592px] space-y-4'
       >
         <div className='flex gap-4 items-center'>
