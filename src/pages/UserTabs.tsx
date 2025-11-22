@@ -2,18 +2,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BorrowedList from './BorrowedList';
 import Profile from './Profile';
 import Reviews from './Reviews';
+import { useSearchParams } from 'react-router-dom';
 
-function UserTabs() {
+interface UserTabsProps {
+  defaultTab?: 'profile' | 'borrowedlist' | 'reviews';
+}
+
+function UserTabs({ defaultTab = 'borrowedlist' }: UserTabsProps) {
+  const [searchParams] = useSearchParams();
+  const tabFromQuery = searchParams.get('tab') as 'profile' | 'borrowedlist' | 'reviews' | null;
+
   return (
     <section className='pt-12 pb-[45px]'>
-      {/* tabs */}
-      <Tabs defaultValue='borrowedlist' className=' rounded-xl '>
+      <Tabs defaultValue={tabFromQuery || defaultTab} className='rounded-xl'>
         <TabsList className='bg-[#F5F5F5]'>
           <TabsTrigger value='profile'>Profile</TabsTrigger>
           <TabsTrigger value='borrowedlist'>Borrowed List</TabsTrigger>
           <TabsTrigger value='reviews'>Reviews</TabsTrigger>
         </TabsList>
-        {/* content */}
         <TabsContent value='profile'>
           <Profile />
         </TabsContent>
@@ -27,5 +33,6 @@ function UserTabs() {
     </section>
   );
 }
+
 
 export default UserTabs;
