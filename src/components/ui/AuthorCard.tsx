@@ -1,4 +1,4 @@
-import { BooksByAuthor } from '@/api/authors';
+import { BooksByAuthor } from '@/api/user/authors';
 import { Author } from '@/types/books';
 import { Icon } from '@iconify/react';
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
