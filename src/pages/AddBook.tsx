@@ -12,15 +12,18 @@ import Container from '@/components/layout/Container';
 import { ArrowLeft, CloudUpload } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { AddBookForm, Author, Category } from '@/types/books';
-import { Link } from 'react-router-dom';
-import { AddApiBook } from '@/api/admin/books';
+import { Link, useParams } from 'react-router-dom';
+import { AddApiBook, EditBook } from '@/api/admin/books';
 import { GetCategories } from '@/api/user/categories';
 import { GetAuthors } from '@/api/user/authors';
 
 function AddBook() {
+  const { id } = useParams();
+
   const addBook = AddApiBook();
+  const editBook = EditBook();
   const { data: categoriesData } = GetCategories();
-  const {data: authorsData } = GetAuthors()
+  const { data: authorsData } = GetAuthors();
 
   const [form, setForm] = useState<AddBookForm>({
     title: '',
@@ -54,7 +57,6 @@ function AddBook() {
   const handleSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log(form);
 
     addBook.mutate(
       {
@@ -80,11 +82,37 @@ function AddBook() {
 
     console.log('READY TO SEND:', form);
   };
+  const handleEdit = () => {
+    editBook.mutate(
+      {
+        id: Number(id),
+        payload: {
+          title: form.title,
+          description: form.description,
+          isbn: 'gfjfffgjkugv',
+          publishedYear: 2000,
+          coverImage: 'string',
+          authorId: form.authorId,
+          categoryId: form.categoryId,
+          totalCopies: 1,
+          availableCopies: 1,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          console.log('Berhasil:', data);
+        },
+        onError: (err) => {
+          console.log('Error:', err);
+        },
+      }
+    );
+  };
 
   return (
     <Container className='py-4'>
       <form
-        onSubmit={handleSubmitForm}
+        onSubmit={id ? handleEdit : handleSubmitForm}
         className='w-full mx-auto max-w-[592px] space-y-4'
       >
         <div className='flex gap-4 items-center'>
@@ -114,7 +142,7 @@ function AddBook() {
           {/* Author */}
           <div>
             <label className='block mb-1 text-sm font-bold'>Author</label>
-          <Select
+            <Select
               onValueChange={(value) =>
                 setForm({ ...form, authorId: Number(value) })
               }
@@ -216,7 +244,7 @@ function AddBook() {
               </p>
               <p className='text-sm-semibold '>PNG or JPG (max. 5mb)</p>
             </label>
-{/* 
+            {/* 
             <input
               id='cover'
               type='file'

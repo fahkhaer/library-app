@@ -1,11 +1,23 @@
+import { GetBooklist } from '@/api/user/booklist';
 import { Button } from '@/components/ui/button';
 import CardListUser from '@/components/ui/CardListUser';
 import { Command, CommandInput } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Book } from '@/types/books';
 import { Link } from 'react-router-dom';
 
 function BookList() {
+  const {
+    data: booklist,
+    isLoading: isLoadingBooks,
+    error: errorBooks,
+  } = GetBooklist();
+
+  
+
+  if (isLoadingBooks) return <p>Loading...</p>;
+  if (errorBooks) return <p>Error loading data</p>;
   return (
     <section className='flex flex-col mt-6 gap-6 pb-[110px]'>
       <h1>Book List</h1>
@@ -69,9 +81,17 @@ function BookList() {
         </TabsList>
 
         {/* Card book list */}
-        <TabsContent value='all'>
-          <CardListUser />{' '}
-        </TabsContent>
+        {booklist.map((item: Book, i: number) => (
+          <TabsContent key={i} value='all'>
+            <CardListUser
+              genre={item.category.name}
+              title={item.title}
+              author={item.author.name}
+              rating={item.rating}
+              bookId={item.id}
+            />
+          </TabsContent>
+        ))}
       </Tabs>
     </section>
   );

@@ -1,4 +1,4 @@
-import { Booklist } from '@/api/user/booklist';
+import {  GetBooklist } from '@/api/user/booklist';
 import { GetCategories } from '@/api/user/categories';
 import Container from '@/components/layout/Container';
 import Card from '@/components/ui/Card';
@@ -17,7 +17,7 @@ function Category() {
     data: booklist,
     isLoading: isLoadingBooks,
     error: errorBooks,
-  } = Booklist();
+  } = GetBooklist();
 
   const toggleCategory = (id: number) => {
     setSelectedCategories((prev) =>

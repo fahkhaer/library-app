@@ -13,8 +13,25 @@ import {
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
 import { Link } from 'react-router-dom';
+import { useDeleteBook } from '@/api/admin/books';
 
-function CardListUser() {
+interface CardListUserProps {
+  genre: string;
+  title: string;
+  author: string;
+  rating: number;
+  bookId: number;
+}
+
+function CardListUser({
+  genre,
+  title,
+  author,
+  rating,
+  bookId,
+}: CardListUserProps) {
+  const { mutate: deleteBook } = useDeleteBook();
+
   return (
     <div className='md:flex justify-end p-5 rounded-2xl bg-white items-center space-y-4'>
       {/* left side */}
@@ -22,16 +39,16 @@ function CardListUser() {
         <img className='h-[138px] w-auto' src='/cover.png' alt='' />
         <div className='flex flex-col gap-1'>
           <Badge variant={'outline'} className='px-2 rounded-sm'>
-            Business & Economics{' '}
+            {genre}
           </Badge>
-          <h2>Book Name</h2>
-          <h4>Author Name</h4>
+          <h2>{title}</h2>
+          <h4>{author}</h4>
           <div className='flex gap-0.5 items-center'>
             <Star
               className='inline-block size-6 text-[#FFAB0D]'
               fill='#FFAB0D'
             />
-            <span className='text-md-semibold ml-1'>4.5</span>
+            <span className='text-md-semibold ml-1'>{rating}</span>
           </div>
         </div>
       </div>
@@ -42,7 +59,7 @@ function CardListUser() {
             <h3>Preview</h3>
           </Link>
         </Button>
-        <Link to={'/add-book'}>
+        <Link to={`/add-book/${bookId}`}>
           <Button variant={'outline'} className=' w-full md:w-24'>
             <h3>Edit</h3>
           </Button>
@@ -75,6 +92,7 @@ function CardListUser() {
                 </AlertDialogCancel>
 
                 <AlertDialogAction
+                  onClick={() => deleteBook(bookId)}
                   style={{ backgroundColor: '#D9206E' }}
                   className='text-white w-full hover:opacity-90'
                 >

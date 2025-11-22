@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const baseUrl = 'https://be-library-api-xh3x6c5iiq-et.a.run.app';
 
-export function Booklist() {
+export function GetBooklist() {
   return useQuery({
     queryKey: ['books'],
     queryFn: async () => {
@@ -11,6 +11,8 @@ export function Booklist() {
 
       return res.data.data.books;
     },
+      refetchOnWindowFocus: true,
+  refetchOnReconnect: true,
   });
 }
 

@@ -13,7 +13,7 @@ import Container from '@/components/layout/Container';
 import { Share2, Star } from 'lucide-react';
 import LoadMoreButton from '@/components/ui/LoadMoreButton';
 import Card from '@/components/ui/Card';
-import { Booklist, Detailbook } from '@/api/user/booklist';
+import { Detailbook, GetBooklist } from '@/api/user/booklist';
 import ReviewersCard from '@/components/ui/ReviewersCard';
 import { Review } from '@/types/reviews';
 import { Book } from '@/types/books';
@@ -24,7 +24,7 @@ function DetailPage() {
   const bookId = Number(id);
 
   const { data, isLoading, error } = Detailbook(bookId);
-  const { data: allBooks } = Booklist();
+  const { data: allBooks } = GetBooklist();
 
   if (!id) return <p>Invalid book ID!</p>;
   if (isLoading) return <p>Loading...</p>;
