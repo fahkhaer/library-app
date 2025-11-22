@@ -6,14 +6,22 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '@/redux/store';
+import { logout } from '@/redux/slices/authSlice';
 
 function Navbar() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
   return (
     <div
       className='flex font-quicksand h-20 px-4 md:px-[120px] justify-between shadow-[0_0_20px_0_#CBCACA40]
@@ -71,13 +79,27 @@ items-center'
             <DropdownMenuTrigger>
               <ChevronDown className='hidden lg:block' />
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuContent className='bg-white'>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
+
+              <Link to={'/user?tab=profile'}>
+                {' '}
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+              </Link>
+              <Link to={'/user?tab=borrowedlist'}>
+                {' '}
+                <DropdownMenuItem>Borrowed List</DropdownMenuItem>
+              </Link>
+              <Link to={'/user?tab=reviews'}>
+                {' '}
+                <DropdownMenuItem>Reviews</DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem
+                onClick={handleLogout}
+                className='text-[#EE1D52]'
+              >
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
