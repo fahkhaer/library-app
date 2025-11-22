@@ -1,5 +1,5 @@
-import { Bookrecomendation } from '@/api/booklist';
-import { GetCategories } from '@/api/categories';
+import { Bookrecomendation } from '@/api/user/booklist';
+import { GetCategories } from '@/api/user/categories';
 import Card from '@/components/ui/Card';
 import {
   Carousel,
