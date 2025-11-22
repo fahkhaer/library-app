@@ -39,6 +39,8 @@ function Login() {
     loginMutation.mutate(values, {
       onSuccess: (data) => {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.user.name);
+
         dispatch(setUser(data.user));
         navigate('/');
       },

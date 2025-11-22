@@ -55,7 +55,7 @@ function CardListUser({
       {/* right side */}
       <div className='flex gap-[13px]'>
         <Button variant={'outline'} className=' w-full md:w-24'>
-          <Link to={'/preview-book/1'}>
+          <Link to={`/preview-book/${bookId}`}>
             <h3>Preview</h3>
           </Link>
         </Button>

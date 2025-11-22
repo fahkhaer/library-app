@@ -17,6 +17,9 @@ import { logout } from '@/redux/slices/authSlice';
 function Navbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const username = localStorage.getItem('username');
+  console.log(username);
+  
 
   const handleLogout = () => {
     dispatch(logout());
@@ -73,7 +76,7 @@ items-center'
               <AvatarImage src='https://github.com/shadcn.png' />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <p className='text-lg-semibold hidden lg:block'>John Doe</p>
+            <p className='text-lg-semibold hidden lg:block'>{username}</p>
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger>

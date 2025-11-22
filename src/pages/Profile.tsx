@@ -1,13 +1,36 @@
 import { Button } from '@/components/ui/button';
-import { useFetchUser } from '@/api/user/auth';
+import { UpdateUser, useFetchUser } from '@/api/user/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useEffect, useState } from 'react';
+import { Input } from '@/components/ui/input';
 
 function Profile() {
+  const updateProfile = UpdateUser();
   const { data: user, isLoading } = useFetchUser();
+  const [isEdit, setIsEdit] = useState(false);
 
-  console.log('ini', user);
+  const [form, setForm] = useState({
+    name: '',
+  });
+  const handleEdit = () => {
+    updateProfile.mutate(
+      { name: form.name },
+      {
+        onSuccess: (data) => {
+          setForm({ name: data.name }); 
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (user) {
+      setForm({ name: user.name });
+    }
+  }, [user]);
   if (isLoading || !user) return <p> Loading...</p>;
 
+  console.log(form.name);
   return (
     <section className='flex flex-col mt-4 md:mt-6 gap-6 pb-[110px]'>
       <h1>Profile</h1>
@@ -21,9 +44,17 @@ function Profile() {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
 
-          <div className='flex justify-between'>
+          <div className='flex justify-between items-center'>
             <h4>Name</h4>
-            <h3>{user.name}</h3>
+            {isEdit ? (
+              <Input
+                className='w-[250px]'
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+            ) : (
+              <h3>{user.name}</h3>
+            )}
           </div>
 
           <div className='flex justify-between'>
@@ -35,9 +66,17 @@ function Profile() {
             <h4>Nomor Handphone</h4>
             <h3>{user.phone}</h3>
           </div>
-
-          <Button variant='secondary' className='w-full'>
-            Update Profile
+          <Button
+            onClick={() => {
+              if (isEdit) {
+                handleEdit(); 
+              }
+              setIsEdit(!isEdit); 
+            }}
+            variant='secondary'
+            className='w-full'
+          >
+            {isEdit ? 'Save Changes' : 'Update Profile'}
           </Button>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/redux/store';
 import { setUser, setToken } from '@/redux/slices/authSlice';
@@ -49,6 +49,8 @@ export function useFetchUser() {
 
       return res.data.data.profile;
     },
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 
   useEffect(() => {
@@ -58,4 +60,38 @@ export function useFetchUser() {
   }, [query.data, dispatch]);
 
   return query;
+}
+
+// ------------------- UPDATE USER -------------------
+type userProps = {
+  name: string;
+};
+
+export function UpdateUser() {
+  const token = localStorage.getItem('token');
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: userProps) => {
+      try {
+        const res = await axios.patch(`${baseUrl}/api/me`, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        return res.data.data;
+      } catch (err: unknown) {
+        const error = err as AxiosError;
+
+        console.log('ERROR RESPONSE:', error.response?.data);
+        throw error;
+      }
+    },
+
+    onSuccess: () => {
+      // Ini yang benar!
+      queryClient.invalidateQueries();
+    },
+  });
 }
