@@ -43,6 +43,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path='/authors-book/:id' element={<BookByAuthor />} />
               <Route path='/cart' element={<Cart />} />
               <Route path='/checkout' element={<Checkout />} />
+              <Route path='/checkout/:id' element={<Checkout />} />
               <Route path='/add-book/:id' element={<AddBook />} />
               <Route path='/add-book/' element={<AddBook />} />
               <Route path='/preview-book/:id' element={<Preview />} />
