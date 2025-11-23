@@ -1,3 +1,6 @@
+import { useFetchUser } from '@/api/user/auth';
+import { Detailbook } from '@/api/user/booklist';
+import { AddLoan } from '@/api/user/loan';
 import Container from '@/components/layout/Container';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -11,10 +14,37 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function Checkout() {
+  const { id } = useParams();
+  const addLoan = AddLoan();
   const [date, setDate] = React.useState<Date | undefined>(undefined);
+
+  const { data: user, isLoading } = useFetchUser();
+  const { data: detailBook, isLoading: isLoadingDetail } = Detailbook(
+    Number(id)
+  );
+
+  const handleClick = () => {
+    addLoan.mutate(
+      {
+        bookId: Number(id),
+        days: 3,
+      },
+      {
+        onSuccess: (data) => {
+          console.log('Berhasil:', data);
+        },
+        onError: (err) => {
+          console.log('Error:', err);
+        },
+      }
+    );
+  };
+
+  if (isLoading || !user) return <p> Loading...</p>;
+  if (isLoadingDetail) return <p> Loading...</p>;
 
   return (
     <Container className='pb-[100px]'>
@@ -28,17 +58,17 @@ function Checkout() {
 
             <div className='flex justify-between'>
               <h4>Name</h4>
-              <h3>JohnDoe</h3>
+              <h3>{user.name}</h3>
             </div>
 
             <div className='flex justify-between'>
               <h4>Email</h4>
-              <h3>johndoe@email.com</h3>
+              <h3>{user.email}</h3>
             </div>
 
             <div className='flex justify-between'>
               <h4>Nomor Handphone</h4>
-              <h3>081234567890</h3>
+              <h3>{user.id}</h3>
             </div>
           </div>
 
@@ -48,12 +78,13 @@ function Checkout() {
 
             <div className='flex py-6 w-full gap-4'>
               <Checkbox id='b1' />
-              <CardList />
-            </div>
 
-            <div className='flex py-6 w-full gap-4'>
-              <Checkbox id='b2' />
-              <CardList />
+              <CardList
+                genre={detailBook.category.name}
+                title={detailBook.title}
+                rating={detailBook.rating}
+                author={detailBook.author.name}
+              />
             </div>
           </div>
         </div>
@@ -137,7 +168,7 @@ function Checkout() {
           </div>
 
           {/* Button */}
-          <Button className='w-full' variant='secondary'>
+          <Button onClick={handleClick} className='w-full' variant='secondary'>
             <Link to={'/success'}>Confirm & Borrow</Link>
           </Button>
         </div>
