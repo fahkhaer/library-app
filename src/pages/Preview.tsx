@@ -31,7 +31,7 @@ function Preview() {
             className='border-2 rounded-none bg-[#E9EAEB] p-2'
             style={{ width: 'clamp(13.25rem, 40.17vw, 30.13rem)' }}
             src={data.coverImage || '/cover.png'}
-            alt=''
+            alt='cover-image'
           />
         </div>
 
@@ -96,7 +96,6 @@ type StatisticsProps = {
 };
 
 const Statistics = ({ review, rating }: StatisticsProps) => {
-  console.log(review);
   const statistics: Statistic[] = [
     { data: '320', info: 'Page' },
     { data: rating, info: 'Rating' },

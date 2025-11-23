@@ -22,7 +22,7 @@ function BookByAuthor() {
               <AvatarImage
                 className='size-20 rounded-full'
                 src='https://github.com/shadcn.png'
-                alt=''
+                alt='avatar'
               />
             </Avatar>
             <div>

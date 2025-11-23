@@ -68,7 +68,7 @@ function DetailPage() {
             className='border-2 rounded-none bg-[#E9EAEB] p-2'
             style={{ width: 'clamp(13.25rem, 40.17vw, 30.13rem)' }}
             src={data.coverImage || '/cover.png'}
-            alt=''
+            alt='cover-book'
           />
         </div>
 
@@ -102,9 +102,11 @@ function DetailPage() {
             <Button className='w-40' variant={'outline'}>
               <Link to={'/cart'}>Add to Cart</Link>
             </Button>
-            <Button className='w-40' variant={'secondary'}>
-              Borrow Book
-            </Button>
+            <Link to={`/checkout/${bookId}`}>
+              <Button className='w-40' variant={'secondary'}>
+                Borrow Book
+              </Button>
+            </Link>
             <div className='rounded-full size-11 p-2 border border-neutral-300 text-center'>
               <Share2 />
             </div>
@@ -181,7 +183,6 @@ type StatisticsProps = {
 };
 
 const Statistics = ({ review, rating }: StatisticsProps) => {
-  console.log(review);
   const statistics: Statistic[] = [
     { data: '320', info: 'Page' },
     { data: rating, info: 'Rating' },

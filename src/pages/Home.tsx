@@ -73,7 +73,7 @@ function Home() {
         </div>
       )}
 
-      {/* Recommendation */}
+      {/* Recomendation */}
       <h1 className='text-lg font-bold mb-5'>Recommendation</h1>
       <div className='flex flex-wrap gap-2 md:gap-5 w-full max-w-screen-xl mx-auto'>
         {displayedBooks.map((item) => (
