@@ -1,3 +1,4 @@
+import { useFetchUser } from '@/api/user/auth';
 import { Badge } from '@/components/ui/badge';
 import CardListBorrowed from '@/components/ui/CardListBorrowed';
 import { Command, CommandInput } from '@/components/ui/command';
@@ -6,6 +7,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 function BorrowedList() {
+  const { data: user, isLoading } = useFetchUser();
+
+  if (isLoading || !user) return <p> Loading...</p>;
+
   return (
     <section className='flex flex-col mt-4 md:mt-6 gap-6 pb-[110px]'>
       <h1>Borrowed List</h1>
@@ -25,19 +30,35 @@ function BorrowedList() {
         {/* mobile */}
         <ScrollArea className='w-full whitespace-nowrap md:hidden'>
           <TabsList className='flex w-max gap-3'>
-            <TabsTrigger variant='secondary' value='all'>All</TabsTrigger>
-            <TabsTrigger variant='secondary' value='active'>Active</TabsTrigger>
-            <TabsTrigger variant='secondary' value='returned'>Returned</TabsTrigger>
-            <TabsTrigger variant='secondary' value='overdue'>Overdue</TabsTrigger>
+            <TabsTrigger variant='secondary' value='all'>
+              All
+            </TabsTrigger>
+            <TabsTrigger variant='secondary' value='active'>
+              Active
+            </TabsTrigger>
+            <TabsTrigger variant='secondary' value='returned'>
+              Returned
+            </TabsTrigger>
+            <TabsTrigger variant='secondary' value='overdue'>
+              Overdue
+            </TabsTrigger>
           </TabsList>
         </ScrollArea>
 
         {/* desktop */}
         <TabsList className='hidden md:flex md:w-fit gap-3'>
-          <TabsTrigger variant='secondary' value='all'>All</TabsTrigger>
-          <TabsTrigger variant='secondary' value='active'>Active</TabsTrigger>
-          <TabsTrigger variant='secondary' value='returned'>Returned</TabsTrigger>
-          <TabsTrigger variant='secondary' value='overdue'>Overdue</TabsTrigger>
+          <TabsTrigger variant='secondary' value='all'>
+            All
+          </TabsTrigger>
+          <TabsTrigger variant='secondary' value='active'>
+            Active
+          </TabsTrigger>
+          <TabsTrigger variant='secondary' value='returned'>
+            Returned
+          </TabsTrigger>
+          <TabsTrigger variant='secondary' value='overdue'>
+            Overdue
+          </TabsTrigger>
         </TabsList>
 
         {/* Card book list */}
@@ -62,6 +83,7 @@ function BorrowedList() {
           <div className='border-t-2 border-neutral-300 w-full'></div>
 
           {/* as User */}
+
           <CardListBorrowed variant='asUser' />
           <CardListBorrowed variant='asUser' />
         </TabsContent>
