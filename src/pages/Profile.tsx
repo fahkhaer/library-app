@@ -17,7 +17,7 @@ function Profile() {
       { name: form.name },
       {
         onSuccess: (data) => {
-          setForm({ name: data.name }); 
+          setForm({ name: data.name });
         },
       }
     );
@@ -30,7 +30,6 @@ function Profile() {
   }, [user]);
   if (isLoading || !user) return <p> Loading...</p>;
 
-  console.log(form.name);
   return (
     <section className='flex flex-col mt-4 md:mt-6 gap-6 pb-[110px]'>
       <h1>Profile</h1>
@@ -69,9 +68,9 @@ function Profile() {
           <Button
             onClick={() => {
               if (isEdit) {
-                handleEdit(); 
+                handleEdit();
               }
-              setIsEdit(!isEdit); 
+              setIsEdit(!isEdit);
             }}
             variant='secondary'
             className='w-full'

@@ -18,7 +18,6 @@ function Navbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const username = localStorage.getItem('username');
-  console.log(username);
   
 
   const handleLogout = () => {
