@@ -1,9 +1,16 @@
-import CardList from '@/components/ui/CardList';
+import { GetMyReview } from '@/api/user/reviews';
+import CardListBorrowed from '@/components/ui/CardListBorrowed';
 import { Command, CommandInput } from '@/components/ui/command';
+import { Review } from '@/types/reviews';
+import dayjs from 'dayjs';
 import { Star } from 'lucide-react';
 
 function Reviews() {
-  const star = 3;
+  const { data: reviews, isLoading } = GetMyReview();
+  
+
+  if (isLoading) return <p> Loading...</p>;
+  console.log('galo', reviews);
 
   return (
     <section className='flex flex-col mt-4 md:mt-6 gap-6 md:pb-[110px]'>
@@ -19,29 +26,42 @@ function Reviews() {
         </Command>
       </div>
       {/* tabs and content */}
-      <div className='shadow-card divide-neutral-300 divide-y bg-white rounded-2xl p-5 space-y-5'>
-        <p className='text-sm-semibold md:text-md-semibold'> 25 August 2025, 13:38 </p>
-        <div className='pt-5'>
-          <CardList />
-        </div>
-        <div className='flex flex-col gap-2 pt-5'>
-          <div className='flex'>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                className='inline-block size-6 border-none text-[#FFAB0D]'
-                stroke={i < star ? '#FFAB0D' : '#A4A7AE'}
-                fill={i < star ? '#FFAB0D' : '#A4A7AE'}
+      <div>
+        {reviews.reviews.map((review: Review) => (
+          <div
+            key={review.id}
+            className='shadow-card divide-neutral-300 divide-y bg-white rounded-2xl p-5 space-y-5'
+          >
+            <p className='text-sm-semibold md:text-md-semibold'>
+              {dayjs(review.createdAt).format('DD MMM YYYY, h:mm')}
+            </p>
+            <div className='pt-5'>
+              <CardListBorrowed
+                genre='sata'
+                title={review.Book.title}
+                rating={review.star}
+                author='sata'
+                image={review.Book.coverImage || '/cover-off.png'}
               />
-            ))}
+            </div>
+            <div className='flex flex-col gap-2 pt-5'>
+              <div className='flex'>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    className='inline-block size-6 border-none text-[#FFAB0D]'
+                    stroke={i < review.star ? '#FFAB0D' : '#A4A7AE'}
+                    fill={i < review.star ? '#FFAB0D' : '#A4A7AE'}
+                  />
+                ))}
+              </div>
+              {/* comment */}
+              <p className='text-sm-semibold md:text-md-semibold'>
+                {review.comment}
+              </p>
+            </div>
           </div>
-          {/* comment */}
-          <p className='text-sm-semibold md:text-md-semibold'>
-            Lorem ipsum dolor sit amet consectetur. Pulvinar porttitor aliquam
-            viverra nunc sed facilisis. Integer tristique nullam morbi mauris
-            ante.
-          </p>
-        </div>
+        ))}
       </div>
     </section>
   );
