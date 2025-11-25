@@ -90,7 +90,6 @@ export function UpdateUser() {
     },
 
     onSuccess: () => {
-      // Ini yang benar!
       queryClient.invalidateQueries();
     },
   });
