@@ -43,8 +43,8 @@ function Checkout() {
     );
   };
 
-  if (isLoading || !user) return <p> Loading...</p>;
-  if (isLoadingDetail) return <p> Loading...</p>;
+  if (isLoading || !user) return <p> Loading user...</p>;
+  if (isLoadingDetail) return <p> Loading detail...</p>;
 
   return (
     <Container className='pb-[100px]'>
@@ -68,7 +68,7 @@ function Checkout() {
 
             <div className='flex justify-between'>
               <h4>Nomor Handphone</h4>
-              <h3>{user.id}</h3>
+              <h3>-</h3>
             </div>
           </div>
 
@@ -80,10 +80,12 @@ function Checkout() {
               <Checkbox id='b1' />
 
               <CardList
-                genre={detailBook.category.name}
+                bookId={Number(id)}
+                genre={detailBook.Category.name}
                 title={detailBook.title}
                 rating={detailBook.rating}
-                author={detailBook.author.name}
+                author={detailBook.Author.name}
+                image={detailBook.coverImage}
               />
             </div>
           </div>
