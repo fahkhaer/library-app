@@ -29,8 +29,8 @@ export type Book = {
   categoryId: number;
   createdAt: string;
   updatedAt: string;
-  author: Author;
-  category: Category;
+  Author: Author;
+  Category: Category;
 };
 
 export type AddBookForm = {
