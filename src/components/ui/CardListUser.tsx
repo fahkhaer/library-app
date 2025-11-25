@@ -21,6 +21,7 @@ interface CardListUserProps {
   author: string;
   rating: number;
   bookId: number;
+  coverImage?: string | null;
 }
 
 function CardListUser({
@@ -29,6 +30,7 @@ function CardListUser({
   author,
   rating,
   bookId,
+  coverImage,
 }: CardListUserProps) {
   const { mutate: deleteBook } = useDeleteBook();
 
@@ -36,7 +38,11 @@ function CardListUser({
     <div className='md:flex justify-end p-5 rounded-2xl bg-white items-center space-y-4'>
       {/* left side */}
       <div className='flex w-full gap-4 '>
-        <img className='h-[138px] w-auto' src='/cover.png' alt='' />
+        <img
+          className='h-[138px] w-auto'
+          src={coverImage || '/cover-off.png'}
+          alt='cover-image'
+        />
         <div className='flex flex-col gap-1'>
           <Badge variant={'outline'} className='px-2 rounded-sm'>
             {genre}
