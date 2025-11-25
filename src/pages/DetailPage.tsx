@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/layout/Container';
-
 import { Share2, Star } from 'lucide-react';
 import LoadMoreButton from '@/components/ui/LoadMoreButton';
 import Card from '@/components/ui/Card';
@@ -18,8 +17,12 @@ import ReviewersCard from '@/components/ui/ReviewersCard';
 import { Review } from '@/types/reviews';
 import { Book } from '@/types/books';
 import { Link, useParams } from 'react-router-dom';
+import { useAddCart } from '@/api/user/cart';
+import axios from 'axios';
 
 function DetailPage() {
+  const addCart = useAddCart();
+
   const { id } = useParams();
   const bookId = Number(id);
 
@@ -30,8 +33,30 @@ function DetailPage() {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error...</p>;
 
+  const handleSubmit = () => {
+    addCart?.mutate(
+      {
+        bookId: bookId,
+        qty: 1,
+      },
+      {
+        onSuccess: (data) => {
+          console.log('Berhasil:', data);
+        },
+        onError: (err) => {
+          if (axios.isAxiosError(err)) {
+            console.log('STATUS:', err.response?.status);
+            console.log('DATA:', err.response?.data);
+          } else {
+            console.log(err);
+          }
+        },
+      }
+    );
+  };
+
   const relatedBooks = (allBooks || []).filter(
-    (book: Book) => book.categoryId === data.categoryId && book.id !== data.id
+    (book: Book) => book.categoryId === data.categoryId && book.id !== bookId
   );
 
   return (
@@ -57,7 +82,7 @@ function DetailPage() {
           <BreadcrumbSeparator />
 
           <BreadcrumbItem>
-            <BreadcrumbPage>{data.title}</BreadcrumbPage>
+            <BreadcrumbPage>{data?.title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -67,7 +92,7 @@ function DetailPage() {
           <img
             className='border-2 rounded-none bg-[#E9EAEB] p-2'
             style={{ width: 'clamp(13.25rem, 40.17vw, 30.13rem)' }}
-            src={data.coverImage || '/cover.png'}
+            src={data.coverImage || '/cover-off.png'}
             alt='cover-book'
           />
         </div>
@@ -75,31 +100,31 @@ function DetailPage() {
         <div className='flex flex-col py-6 md:py-[18px] flex-1 gap-5'>
           <div className='flex flex-col gap-0.5 items-start'>
             <Badge variant={'outline'} className='px-2 rounded-sm w-35'>
-              {data.category.name}
+              {data?.Category?.name}
             </Badge>
-            <h2>{data.title}</h2>
-            <h4>{data.author.name}</h4>
+            <h2>{data?.title}</h2>
+            <h4>{data?.Author?.name}</h4>
 
             <div className='flex gap-0.5 items-center'>
               <Star
                 className='inline-block size-6 text-[#FFAB0D]'
                 fill='#FFAB0D'
               />
-              <span className='text-md-semibold ml-1'>{data.rating}</span>
+              <span className='text-md-semibold ml-1'>{data?.rating}</span>
             </div>
 
-            <Statistics rating={data.rating} review={data.reviewCount} />
+            <Statistics rating={data?.rating} review={data?.reviewCount} />
           </div>
 
           <div className='border-t border-neutral-300'></div>
 
           <div>
             <p className='text-xl font-bold'>Description</p>
-            <p className='text-md-regular'>{data.description}</p>
+            <p className='text-md-regular'>{data?.description}</p>
           </div>
 
           <div className='flex gap-2 items-center h-12'>
-            <Button className='w-40' variant={'outline'}>
+            <Button onClick={handleSubmit} className='w-40' variant={'outline'}>
               <Link to={'/cart'}>Add to Cart</Link>
             </Button>
             <Link to={`/checkout/${bookId}`}>
@@ -125,13 +150,13 @@ function DetailPage() {
               fill='#FFAB0D'
             />
             <span className='text-md-semibold ml-1'>
-              ( {data.reviewCount} Ulasan)
+              ( {data?.reviewCount} Ulasan)
             </span>
           </div>
         </div>
 
         <div className='flex flex-wrap gap-5'>
-          {data.reviews.map((review: Review) => (
+          {data?.Review.map((review: Review) => (
             <ReviewersCard key={review.id} review={review} />
           ))}
         </div>
@@ -144,7 +169,7 @@ function DetailPage() {
       <section>
         <h1 className='mb-5 md:mb-10'>Related Books</h1>
 
-        {relatedBooks.length === 0 ? (
+        {relatedBooks?.length === 0 ? (
           <h4>No related books found!</h4>
         ) : (
           <div className='flex flex-wrap gap-5'>
@@ -157,7 +182,7 @@ function DetailPage() {
                 <Card
                   className='w-full'
                   name={book.title}
-                  author={book.author?.name || 'Unknown'}
+                  author={book.Author?.name || 'Unknown'}
                   image={book.coverImage || '/cover-off.png'}
                   rating={book.rating}
                 />
