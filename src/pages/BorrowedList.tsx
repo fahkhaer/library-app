@@ -1,15 +1,25 @@
-import { useFetchUser } from '@/api/user/auth';
+import { GetBooklist } from '@/api/user/booklist';
+import { GetMyLoan } from '@/api/user/loan';
 import { Badge } from '@/components/ui/badge';
 import CardListBorrowed from '@/components/ui/CardListBorrowed';
 import { Command, CommandInput } from '@/components/ui/command';
 import LoadMoreButton from '@/components/ui/LoadMoreButton';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Loan } from '@/types/loans';
+import dayjs from 'dayjs';
 
 function BorrowedList() {
-  const { data: user, isLoading } = useFetchUser();
+  const { data: loans, isLoading } = GetMyLoan();
+  const { data: allBooks } = GetBooklist();
 
-  if (isLoading || !user) return <p> Loading...</p>;
+  console.log('all book', allBooks);
+
+  if (isLoading) return <p>Loading...</p>;
+
+  console.log('ini get', loans);
+
+  if (!Array.isArray(loans)) return <p>No loans found</p>;
 
   return (
     <section className='flex flex-col mt-4 md:mt-6 gap-6 pb-[110px]'>
@@ -62,31 +72,48 @@ function BorrowedList() {
         </TabsList>
 
         {/* Card book list */}
-        <TabsContent
-          className='flex mt-6 flex-col divide-neutral-300 bg-white p-5 gap-5 rounded-2xl'
-          value='all'
-        >
-          {/* status */}
-          <div className='flex justify-between items-center gap-3'>
+        {loans.map((item: Loan, i: number) => (
+          <TabsContent
+            key={i}
+            className='flex mt-6 flex-col divide-neutral-300 bg-white p-5 gap-5 rounded-2xl'
+            value='all'
+          >
+            {/* status */}
             <div className='flex justify-between items-center gap-3'>
-              <h3>Status</h3>
-              <Badge variant='secondary'>Active</Badge>
+              <div className='flex justify-between items-center gap-3'>
+                <h3>Status</h3>
+                <Badge variant='secondary'>{item.status}</Badge>
+              </div>
+              {/* due date */}
+              <div className='flex items-center gap-3'>
+                <h3>Due Date</h3>
+                <Badge variant='destructive'>
+                  {dayjs(item.dueAt).format('DD MMMM YYYY')}
+                </Badge>
+              </div>
             </div>
-            {/* due date */}
-            <div className='flex items-center gap-3'>
-              <h3>Due Date</h3>
-              <Badge variant='destructive'>31 August 2025</Badge>
-            </div>
-          </div>
 
-          {/* line border */}
-          <div className='border-t-2 border-neutral-300 w-full'></div>
+            {/* line border */}
+            <div className='border-t-2 border-neutral-300 w-full'></div>
 
-          {/* as User */}
-
-          <CardListBorrowed variant='asUser' />
-          <CardListBorrowed variant='asUser' />
-        </TabsContent>
+            {/* as User */}
+            <CardListBorrowed
+              variant='asUser'
+              genre={allBooks?.[0]?.Category.name}
+              title={item.Book.title}
+              author={allBooks?.[0]?.Author.name}
+              image={allBooks?.[0]?.coverImage}
+              date={dayjs(item.borrowedAt).format('DD MMMM YYYY')}
+              duration={(() => {
+                const endTime = item.dueAt ? new Date(item.dueAt) : new Date();
+                const diff =
+                  endTime.getTime() - new Date(item.borrowedAt).getTime();
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                return `duration ${days} days`;
+              })()}
+            />
+          </TabsContent>
+        ))}
       </Tabs>
 
       <LoadMoreButton />
