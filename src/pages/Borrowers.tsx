@@ -55,7 +55,16 @@ function Borrowers() {
             </div>
             {/* line border */}
             <div className='border-t-2  border-neutral-300 w-full'> </div>
-            <CardListBorrowed variant='asAdmin' />{' '}
+            <CardListBorrowed
+              variant='asAdmin'
+              genre=''
+              title='{}'
+              author='{}'
+              image=''
+              rating={0}
+              date=''
+              duration=''
+            />{' '}
           </TabsContent>
         </Tabs>
         <LoadMoreButton />
