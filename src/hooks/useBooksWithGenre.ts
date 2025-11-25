@@ -9,7 +9,9 @@ export function useBooksWithGenre(books: Book[]) {
     let filtered = books;
 
     if (selectedGenre) {
-      filtered = books.filter((book: Book) => book.category?.name === selectedGenre);
+      filtered = books.filter(
+        (book: Book) => book.Category?.name === selectedGenre
+      );
     }
 
     return filtered.slice(0, visibleCount);
