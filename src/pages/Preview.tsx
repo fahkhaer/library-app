@@ -30,7 +30,7 @@ function Preview() {
           <img
             className='border-2 rounded-none bg-[#E9EAEB] p-2'
             style={{ width: 'clamp(13.25rem, 40.17vw, 30.13rem)' }}
-            src={data.coverImage || '/cover.png'}
+            src={data.coverImage || '/cover-off.png'}
             alt='cover-image'
           />
         </div>
@@ -65,9 +65,11 @@ function Preview() {
             <Button className='w-full md:w-40' variant={'outline'}>
               <Link to={'/cart'}>Add to Cart</Link>
             </Button>
-            <Button className='w-full md:w-40' variant={'secondary'}>
-              Borrow Book
-            </Button>
+            <Link to={`/checkout/${bookId}`}>
+              <Button className='w-40' variant={'secondary'}>
+                Borrow Book
+              </Button>
+            </Link>
             <div
               className='rounded-full  p-2 border border-neutral-300 text-center'
               style={{ width: 'clamp(1.25rem, 55vw, 2.75rem)' }}
