@@ -55,6 +55,7 @@ function CardListBorrowed({
       {
         onSuccess: (data) => {
           console.log('Berhasil:', data);
+          setOpen(false);
         },
         onError: (err) => {
           console.log('Error:', err);
@@ -62,6 +63,8 @@ function CardListBorrowed({
       }
     );
   };
+
+  const [open, setOpen] = useState(false);
 
   return (
     <div className='flex flex-col md:flex-row justify-between pb-3 md:pb-5 rounded-2xl bg-white items-start md:items-center gap-4'>
@@ -85,8 +88,8 @@ function CardListBorrowed({
       {/* right side */}
       <div className='w-full md:w-auto flex flex-col md:block gap-[13px]'>
         {variant === 'asUser' && (
-          <Dialog>
-            <DialogTrigger>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger onClick={() => setOpen(true)}>
               <Button variant={'secondary'} className='w-full md:w-[182px]'>
                 <h3>Give Review</h3>
               </Button>
