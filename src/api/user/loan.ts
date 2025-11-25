@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { baseUrl } from './booklist';
 
@@ -9,7 +9,6 @@ type PayloadLoan = {
 
 export const AddLoan = () => {
   const token = localStorage.getItem('token');
- 
 
   return useMutation({
     mutationFn: async (payload: PayloadLoan) => {
@@ -31,3 +30,22 @@ export const AddLoan = () => {
     },
   });
 };
+
+export function GetMyLoan() {
+  return useQuery({
+    queryKey: ['loan'],
+    queryFn: async () => {
+      const token = localStorage.getItem('token');
+
+      const res = await axios.get(`${baseUrl}/api/me/loans`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return res.data.data.loans;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  });
+}
