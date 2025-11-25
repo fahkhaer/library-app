@@ -11,15 +11,38 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from './textarea';
 import { AddReview } from '@/api/user/reviews';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface CardListBorrowedProps {
-  variant: 'asUser' | 'asAdmin';
+  variant?: 'asUser' | 'asAdmin';
+  className?: string;
+  genre?: string;
+  author?: string;
+  title?: string | null;
+  date?: string | null;
+  duration?: string | null;
+  image?: string;
+  rating?: number;
 }
 
-function CardListBorrowed({ variant }: CardListBorrowedProps) {
+function CardListBorrowed({
+  variant,
+  genre,
+  title,
+  author,
+  image,
+  rating,
+  date,
+  duration,
+}: CardListBorrowedProps) {
   const addReview = AddReview();
   const [star, setStar] = useState(0);
+
+  useEffect(() => {
+    if (rating !== undefined && rating !== null) {
+      setStar(rating);
+    }
+  }, [rating]);
   const [comment, setComment] = useState('');
 
   const handleSubmit = () => {
@@ -44,16 +67,18 @@ function CardListBorrowed({ variant }: CardListBorrowedProps) {
     <div className='flex flex-col md:flex-row justify-between pb-3 md:pb-5 rounded-2xl bg-white items-start md:items-center gap-4'>
       {/* left side */}
       <div className='flex gap-4'>
-        <img className='h-[138px] w-auto' src='/cover.png' alt='' />
-        <div className='flex flex-col gap-1'>
+        <img className='h-[138px] w-auto' src={image || '/cover.png'} alt='' />
+        <div className='flex justify-center flex-col gap-1'>
           <Badge variant={'outline'} className='px-2 rounded-sm'>
-            Business & Economics
+            {genre}{' '}
           </Badge>
-          <h2>Book Name</h2>
-          <h4>Author Name</h4>
-          <span className='md:text-md-bold text-sm-bold'>
-            29 Aug 2025 • Duration 3 Days
-          </span>
+          <h2>{title}</h2>
+          <h4>{author}</h4>
+          {variant === 'asUser' && (
+            <span className='md:text-md-bold text-sm-bold'>
+              {date} • {duration}
+            </span>
+          )}
         </div>
       </div>
 
