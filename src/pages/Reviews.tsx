@@ -1,3 +1,4 @@
+import { GetBooklist } from '@/api/user/booklist';
 import { GetMyReview } from '@/api/user/reviews';
 import CardListBorrowed from '@/components/ui/CardListBorrowed';
 import { Command, CommandInput } from '@/components/ui/command';
@@ -7,10 +8,9 @@ import { Star } from 'lucide-react';
 
 function Reviews() {
   const { data: reviews, isLoading } = GetMyReview();
-  
+  const { data: allBooks } = GetBooklist();
 
   if (isLoading) return <p> Loading...</p>;
-  console.log('galo', reviews);
 
   return (
     <section className='flex flex-col mt-4 md:mt-6 gap-6 md:pb-[110px]'>
@@ -37,10 +37,10 @@ function Reviews() {
             </p>
             <div className='pt-5'>
               <CardListBorrowed
-                genre='sata'
+                genre={allBooks?.[0]?.Category.name}
                 title={review.Book.title}
                 rating={review.star}
-                author='sata'
+                author={allBooks?.[0]?.Author.name}
                 image={review.Book.coverImage || '/cover-off.png'}
               />
             </div>
