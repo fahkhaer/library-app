@@ -12,6 +12,8 @@ import LoadMoreButton from '@/components/ui/LoadMoreButton';
 import PopularAuthor from '@/components/ui/PopularAuthor';
 import { Link } from 'react-router-dom';
 import { useBooksWithGenre } from '@/hooks/useBooksWithGenre';
+import { useSearchStore } from '@/store/searchStore';
+import { Book } from '@/types/books';
 
 function Home() {
   const {
@@ -28,6 +30,8 @@ function Home() {
   const { displayedBooks, selectedGenre, setSelectedGenre, handleLoadMore } =
     useBooksWithGenre(booksAll || []);
 
+  const { query } = useSearchStore();
+
   if (isLoadingCategories || isLoadingBooks) return <p>Loading...</p>;
   if (errorCategories) return <p>Error loading categories</p>;
   if (errorBooks) return <p>Error loading books</p>;
@@ -37,6 +41,13 @@ function Home() {
       name: item.name || 'Unknown',
       icon: item.name ? `/${item.name}.png` : '/cover-off.png',
     })) || [];
+
+  const filteredBooks =
+    query.trim().length > 0
+      ? (booksAll || []).filter((book: Book) =>
+          book.title.toLowerCase().includes(query.toLowerCase())
+        )
+      : displayedBooks;
 
   return (
     <div className='pb-16 pt-6 md:pt-12 md:pb-[116px]'>
@@ -54,7 +65,7 @@ function Home() {
       </Carousel>
 
       {/* Genres */}
-      {genres.length > 0 && (
+      {genres.length > 0 && query.trim().length === 0 && (
         <div className='flex flex-wrap gap-3 my-10'>
           {genres.map((item, index) => (
             <div
@@ -73,10 +84,13 @@ function Home() {
         </div>
       )}
 
-      {/* Recomendation */}
-      <h1 className='text-lg font-bold mb-5'>Recommendation</h1>
+      {/* Recommendation */}
+      <h1 className='text-lg font-bold mb-5'>
+        {query.trim().length > 0 ? 'Search Results' : 'Recommendation'}
+      </h1>
+
       <div className='flex flex-wrap gap-2 md:gap-5 w-full max-w-screen-xl mx-auto'>
-        {displayedBooks.map((item) => (
+        {filteredBooks.map((item: Book) => (
           <Link
             key={item.id}
             to={`/detail/${item.id}`}
@@ -93,9 +107,11 @@ function Home() {
       </div>
 
       {/* Load More */}
-      <div onClick={handleLoadMore}>
-        <LoadMoreButton className='mt-8 mb-12' />
-      </div>
+      {query.trim().length === 0 && (
+        <div onClick={handleLoadMore}>
+          <LoadMoreButton className='mt-8 mb-12' />
+        </div>
+      )}
 
       <div className='border-t border-neutral-300'></div>
 

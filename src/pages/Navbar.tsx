@@ -14,17 +14,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/redux/store';
 import { logout } from '@/redux/slices/authSlice';
 import { useSelector } from 'react-redux';
+import { useSearchStore } from '@/store/searchStore';
 
 function Navbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const username = localStorage.getItem('username');
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: any) => state.auth.user);
+
+  const { setQuery } = useSearchStore();
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
   };
+
   return (
     <div
       className='flex font-quicksand h-20 px-4 md:px-[120px] justify-between shadow-[0_0_20px_0_#CBCACA40]
@@ -43,17 +47,19 @@ items-center'
           </p>
         </div>
       </Link>
-      {/* search bar */}
+
+      {/* SEARCH BAR - Navbar */}
       <div className='hidden lg:block'>
         <Command className='rounded-full justify-center h-22 border border-neutral-300 gap-2 px-4 md:min-w-[500px]'>
           <CommandInput
             className='text-neutral-600 text-sm '
-            placeholder='Search book '
+            placeholder='Search book'
+            onValueChange={(value) => setQuery(value)}
           />
         </Command>
       </div>
 
-      {/* right side icons */}
+      {/* Right Icons */}
       <div className='flex gap-6 items-center '>
         <Search className='lg:hidden block' />
 
@@ -64,12 +70,13 @@ items-center'
               icon='lets-icons:bag-fill'
               width='32'
               height='32'
-            />{' '}
-            <Badge className='absolute hover:bg-red-700 left-5 bg-[#EE1D52] text-white h-5 min-w-5 text-center  rounded-[833.33px] font-mono tabular-nums p-[6.67px]  '>
+            />
+            <Badge className='absolute hover:bg-red-700 left-5 bg-[#EE1D52] text-white h-5 min-w-5 text-center rounded-[833.33px] font-mono tabular-nums p-[6.67px]'>
               1
             </Badge>
-          </div>{' '}
+          </div>
         </Link>
+
         <div className='flex gap-4 items-center'>
           <Link
             to={
