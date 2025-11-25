@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { baseUrl } from './booklist';
 
@@ -22,3 +22,18 @@ export const AddReview = () => {
     },
   });
 };
+
+export function GetMyReview() {
+  return useQuery({
+    queryKey: ['reviews'],
+    queryFn: async () => {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${baseUrl}/api/me/reviews`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return res.data.data;
+    },
+  });
+}
