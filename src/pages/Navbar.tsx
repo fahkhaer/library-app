@@ -13,12 +13,13 @@ import { ChevronDown, Search } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/redux/store';
 import { logout } from '@/redux/slices/authSlice';
+import { useSelector } from 'react-redux';
 
 function Navbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const username = localStorage.getItem('username');
-  
+  const user = useSelector((state) => state.auth.user);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -70,13 +71,23 @@ items-center'
           </div>{' '}
         </Link>
         <div className='flex gap-4 items-center'>
-          <Link className='flex gap-4 items-center' to={'/user'}>
+          <Link
+            to={
+              user.role === 'ADMIN'
+                ? '/admin'
+                : user.role === 'USER'
+                ? '/user'
+                : '/'
+            }
+            className='flex gap-4 items-center'
+          >
             <Avatar>
               <AvatarImage src='https://github.com/shadcn.png' />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <p className='text-lg-semibold hidden lg:block'>{username}</p>
           </Link>
+
           <DropdownMenu>
             <DropdownMenuTrigger>
               <ChevronDown className='hidden lg:block' />
@@ -84,18 +95,32 @@ items-center'
             <DropdownMenuContent className='bg-white'>
               <DropdownMenuSeparator />
 
-              <Link to={'/user?tab=profile'}>
-                {' '}
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-              </Link>
-              <Link to={'/user?tab=borrowedlist'}>
-                {' '}
-                <DropdownMenuItem>Borrowed List</DropdownMenuItem>
-              </Link>
-              <Link to={'/user?tab=reviews'}>
-                {' '}
-                <DropdownMenuItem>Reviews</DropdownMenuItem>
-              </Link>
+              {user.role === 'ADMIN' ? (
+                <>
+                  <Link to='admin?tab=borrowers'>
+                    <DropdownMenuItem>Borrowed List</DropdownMenuItem>
+                  </Link>
+                  <Link to='/admin?tab=userlist'>
+                    <DropdownMenuItem>User</DropdownMenuItem>
+                  </Link>
+                  <Link to='/admin?tab=booklist'>
+                    <DropdownMenuItem>Booklist</DropdownMenuItem>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to='/user?tab=profile'>
+                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                  </Link>
+                  <Link to='/user?tab=borrowedlist'>
+                    <DropdownMenuItem>Borrowed List</DropdownMenuItem>
+                  </Link>
+                  <Link to='/user?tab=reviews'>
+                    <DropdownMenuItem>Reviews</DropdownMenuItem>
+                  </Link>
+                </>
+              )}
+
               <DropdownMenuItem
                 onClick={handleLogout}
                 className='text-[#EE1D52]'
