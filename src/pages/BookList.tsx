@@ -14,8 +14,6 @@ function BookList() {
     error: errorBooks,
   } = GetBooklist();
 
-  
-
   if (isLoadingBooks) return <p>Loading...</p>;
   if (errorBooks) return <p>Error loading data</p>;
   return (
@@ -84,9 +82,10 @@ function BookList() {
         {booklist.map((item: Book, i: number) => (
           <TabsContent key={i} value='all'>
             <CardListUser
-              genre={item.category.name}
+              coverImage={item.coverImage}
+              genre={item.Category.name}
               title={item.title}
-              author={item.author.name}
+              author={item.Author.name}
               rating={item.rating}
               bookId={item.id}
             />
