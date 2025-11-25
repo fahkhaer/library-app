@@ -60,11 +60,11 @@ function Cart() {
       <div className='md:hidden border-t-2 flex justify-between fixed items-center w-full left-0 bottom-0 shadow-card p-4 bg-white '>
         <div>
           <h4>Total Book</h4>
-          <h3>2 Items</h3>
+          <h3>{data.items.length} Items</h3>
         </div>
-        <Button className='w-1/2' variant={'secondary'}>
-          <Link to={'/checkout'}>Borrow Books</Link>
-        </Button>
+          <Button className='w-1/2' variant={'secondary'}>
+            <Link to={'/checkout'}>Borrow Books</Link>
+          </Button>
       </div>
     </Container>
   );
