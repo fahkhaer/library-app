@@ -12,31 +12,33 @@ import {
 import { Textarea } from './textarea';
 import { AddReview } from '@/api/user/reviews';
 import { useEffect, useState } from 'react';
+import { Detailbook } from '@/api/user/booklist';
 
 interface CardListBorrowedProps {
   variant?: 'asUser' | 'asAdmin';
   className?: string;
-  genre?: string;
-  author?: string;
   title?: string | null;
   date?: string | null;
   duration?: string | null;
   image?: string;
   rating?: number;
+  bookId?: number;
 }
 
 function CardListBorrowed({
   variant,
-  genre,
   title,
-  author,
   image,
   rating,
   date,
   duration,
+  bookId,
 }: CardListBorrowedProps) {
+  const { data, isLoading, error } = Detailbook(Number(bookId));
+
   const addReview = AddReview();
   const [star, setStar] = useState(0);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (rating !== undefined && rating !== null) {
@@ -44,11 +46,13 @@ function CardListBorrowed({
     }
   }, [rating]);
   const [comment, setComment] = useState('');
+  if (isLoading && bookId) return <p>Loading...</p>;
+  if (error) return <p>Error...</p>;
 
   const handleSubmit = () => {
     addReview.mutate(
       {
-        bookId: 1,
+        bookId: Number(bookId),
         star: star,
         comment: comment,
       },
@@ -64,8 +68,6 @@ function CardListBorrowed({
     );
   };
 
-  const [open, setOpen] = useState(false);
-
   return (
     <div className='flex flex-col md:flex-row justify-between pb-3 md:pb-5 rounded-2xl bg-white items-start md:items-center gap-4'>
       {/* left side */}
@@ -73,10 +75,10 @@ function CardListBorrowed({
         <img className='h-[138px] w-auto' src={image || '/cover.png'} alt='' />
         <div className='flex justify-center flex-col gap-1'>
           <Badge variant={'outline'} className='px-2 rounded-sm'>
-            {genre}{' '}
+            {data?.Category?.name}{' '}
           </Badge>
           <h2>{title}</h2>
-          <h4>{author}</h4>
+          <h4>{data?.Author?.name}</h4>
           {variant === 'asUser' && (
             <span className='md:text-md-bold text-sm-bold'>
               {date} • {duration}
