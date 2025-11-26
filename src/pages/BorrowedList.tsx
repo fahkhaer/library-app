@@ -1,4 +1,3 @@
-import { GetBooklist } from '@/api/user/booklist';
 import { GetMyLoan } from '@/api/user/loan';
 import { Badge } from '@/components/ui/badge';
 import CardListBorrowed from '@/components/ui/CardListBorrowed';
@@ -11,13 +10,8 @@ import dayjs from 'dayjs';
 
 function BorrowedList() {
   const { data: loans, isLoading } = GetMyLoan();
-  const { data: allBooks } = GetBooklist();
-
-  console.log('all book', allBooks);
 
   if (isLoading) return <p>Loading...</p>;
-
-  console.log('ini get', loans);
 
   if (!Array.isArray(loans)) return <p>No loans found</p>;
 
@@ -98,18 +92,20 @@ function BorrowedList() {
 
             {/* as User */}
             <CardListBorrowed
+              bookId={item.bookId}
               variant='asUser'
-              genre={allBooks?.[0]?.Category.name}
               title={item.Book.title}
-              author={allBooks?.[0]?.Author.name}
-              image={allBooks?.[0]?.coverImage}
+              image={item?.Book?.coverImage}
               date={dayjs(item.borrowedAt).format('DD MMMM YYYY')}
               duration={(() => {
-                const endTime = item.dueAt ? new Date(item.dueAt) : new Date();
-                const diff =
-                  endTime.getTime() - new Date(item.borrowedAt).getTime();
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                return `duration ${days} days`;
+                const borrowedAt = new Date(item.borrowedAt);
+                const dueAt = item.dueAt ? new Date(item.dueAt) : new Date();
+                const diffDays = Math.floor(
+                  (dueAt.setHours(0, 0, 0, 0) -
+                    borrowedAt.setHours(0, 0, 0, 0)) /
+                    (1000 * 60 * 60 * 24)
+                );
+                return `duration ${diffDays} days`;
               })()}
             />
           </TabsContent>
