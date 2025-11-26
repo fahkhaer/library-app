@@ -42,7 +42,12 @@ function Login() {
         localStorage.setItem('username', data.user.name);
 
         dispatch(setUser(data.user));
-        navigate('/');
+
+        if (data.user.role === 'USER') {
+          navigate('/');
+        } else if (data.user.role === 'ADMIN') {
+          navigate('/admin');
+        }
       },
       onError: (err) => console.error(err),
     });
