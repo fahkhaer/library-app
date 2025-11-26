@@ -10,6 +10,7 @@ function Preview() {
   const bookId = Number(id);
 
   const { data, isLoading, error } = Detailbook(bookId);
+console.log(bookId);
 
   if (!id) return <p>Invalid book ID!</p>;
   if (isLoading) return <p>Loading...</p>;
@@ -38,10 +39,10 @@ function Preview() {
         <div className='flex flex-col py-6 md:py-[18px] flex-1 gap-5'>
           <div className='flex flex-col gap-0.5 items-start'>
             <Badge variant={'outline'} className='px-2 rounded-sm w-35'>
-              {data.category.name}
+              {data.Category.name}
             </Badge>
             <h2>{data.title}</h2>
-            <h4>{data.author.name}</h4>
+            <h4>{data.Author.name}</h4>
 
             <div className='flex gap-0.5 items-center'>
               <Star
