@@ -13,8 +13,8 @@ const badgeVariants = cva(
         secondary:
           'border-transparent bg-[#24A5000D] text-sm font-bold text-[#24A500] hover:bg-secondary/80',
         destructive:
-          'border-transparent w-fit rounded-1 text-sm font-bold bg-[#EE1D521A] text-[#EE1D52] hover:bg-destructive/80',
-        outline: 'text-foreground leading-7',
+          'border-transparent rounded-1 text-sm font-bold bg-[#EE1D521A] text-[#EE1D52] hover:bg-destructive/80',
+        outline: 'text-foreground w-fit leading-7',
       },
     },
     defaultVariants: {
