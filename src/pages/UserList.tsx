@@ -22,6 +22,7 @@ import { GetUsers, GetUsersPage } from '@/api/admin/user';
 import dayjs from 'dayjs';
 import { AdminUser } from '@/types/admin';
 import { useState } from 'react';
+import { useSearchStore } from '@/store/searchStore';
 
 function UserList() {
   const {
@@ -30,6 +31,7 @@ function UserList() {
     error: errorUsers,
   } = GetUsers();
 
+  const { query, setQuery } = useSearchStore();
   const [currentPage, setCurrentPage] = useState(1);
 
   const {
@@ -42,6 +44,10 @@ function UserList() {
   const totalPages = pages?.totalPages || 1;
   const totalEntries = pages?.total || 0;
   const limit = pages?.limit || 10;
+
+  const filteredUsers = users.filter((user: AdminUser) =>
+    user.name.toLowerCase().includes(query.toLowerCase())
+  );
 
   if (loadingUsers || loadingPages) return <p>Loading...</p>;
   if (errorUsers || errorPages) return <p>Error loading users</p>;
@@ -57,6 +63,8 @@ function UserList() {
           <CommandInput
             className='text-neutral-600 text-sm'
             placeholder='Search user'
+            onValueChange={(value) => setQuery(value)}
+            value={query}
           />
         </Command>
       </div>
@@ -74,7 +82,7 @@ function UserList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((user: AdminUser, i: number) => (
+            {filteredUsers.map((user: AdminUser, i: number) => (
               <TableRow key={user.id}>
                 <TableCell className='text-center'>{i + 1}</TableCell>
                 <TableCell>{user.name}</TableCell>
