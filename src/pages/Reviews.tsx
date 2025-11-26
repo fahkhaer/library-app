@@ -1,4 +1,3 @@
-import { GetBooklist } from '@/api/user/booklist';
 import { GetMyReview } from '@/api/user/reviews';
 import CardListBorrowed from '@/components/ui/CardListBorrowed';
 import { Command, CommandInput } from '@/components/ui/command';
@@ -8,7 +7,6 @@ import { Star } from 'lucide-react';
 
 function Reviews() {
   const { data: reviews, isLoading } = GetMyReview();
-  const { data: allBooks } = GetBooklist();
 
   if (isLoading) return <p> Loading...</p>;
 
@@ -26,43 +24,41 @@ function Reviews() {
         </Command>
       </div>
       {/* tabs and content */}
-      <div>
-        {reviews.reviews.map((review: Review) => (
-          <div
-            key={review.id}
-            className='shadow-card divide-neutral-300 divide-y bg-white rounded-2xl p-5 space-y-5'
-          >
-            <p className='text-sm-semibold md:text-md-semibold'>
-              {dayjs(review.createdAt).format('DD MMM YYYY, h:mm')}
-            </p>
-            <div className='pt-5'>
-              <CardListBorrowed
-                genre={allBooks?.[0]?.Category.name}
-                title={review.Book.title}
-                rating={review.star}
-                author={allBooks?.[0]?.Author.name}
-                image={review.Book.coverImage || '/cover-off.png'}
-              />
-            </div>
-            <div className='flex flex-col gap-2 pt-5'>
-              <div className='flex'>
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className='inline-block size-6 border-none text-[#FFAB0D]'
-                    stroke={i < review.star ? '#FFAB0D' : '#A4A7AE'}
-                    fill={i < review.star ? '#FFAB0D' : '#A4A7AE'}
-                  />
-                ))}
-              </div>
-              {/* comment */}
-              <p className='text-sm-semibold md:text-md-semibold'>
-                {review.comment}
-              </p>
-            </div>
+
+      {reviews.reviews.map((review: Review) => (
+        <div
+          key={review.id}
+          className='shadow-card divide-neutral-300 divide-y bg-white rounded-2xl p-5 space-y-5'
+        >
+          <p className='text-sm-semibold md:text-md-semibold'>
+            {dayjs(review.createdAt).format('DD MMM YYYY, h:mm')}
+          </p>
+          <div className='pt-5'>
+            <CardListBorrowed
+              bookId={review?.bookId}
+              title={review.Book.title}
+              rating={review.star}
+              image={review.Book.coverImage || '/cover-off.png'}
+            />
           </div>
-        ))}
-      </div>
+          <div className='flex flex-col gap-2 pt-5'>
+            <div className='flex'>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className='inline-block size-6 border-none text-[#FFAB0D]'
+                  stroke={i < review.star ? '#FFAB0D' : '#A4A7AE'}
+                  fill={i < review.star ? '#FFAB0D' : '#A4A7AE'}
+                />
+              ))}
+            </div>
+            {/* comment */}
+            <p className='text-sm-semibold md:text-md-semibold'>
+              {review.comment}
+            </p>
+          </div>
+        </div>
+      ))}
     </section>
   );
 }
