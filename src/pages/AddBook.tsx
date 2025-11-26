@@ -9,7 +9,7 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 import Container from '@/components/layout/Container';
-import { ArrowLeft, CloudUpload } from 'lucide-react';
+import { ArrowLeft, CloudUpload, X } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { AddBookForm, Author, Category } from '@/types/books';
 import { Link, useParams } from 'react-router-dom';
@@ -17,6 +17,7 @@ import { AddApiBook, EditBook } from '@/api/admin/books';
 import { GetCategories } from '@/api/user/categories';
 import { GetAuthors } from '@/api/user/authors';
 import { Detailbook } from '@/api/user/booklist';
+import { Alert, AlertTitle } from '@/components/ui/alert';
 
 function AddBook() {
   const { id } = useParams();
@@ -41,6 +42,8 @@ function AddBook() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const validate = () => {
     const err: Record<string, string> = {};
@@ -76,6 +79,8 @@ function AddBook() {
       {
         onSuccess: (data) => {
           console.log('Berhasil:', data);
+          setShowSuccess(true);
+          setTimeout(() => setShowSuccess(false), 3000);
         },
         onError: (err) => {
           console.log('Error:', err);
@@ -104,6 +109,8 @@ function AddBook() {
       {
         onSuccess: (data) => {
           console.log('Berhasil:', data);
+          setShowSuccess(true);
+          setTimeout(() => setShowSuccess(false));
         },
         onError: (err) => {
           console.log('Error:', err);
@@ -131,7 +138,7 @@ function AddBook() {
   if (error && id) return <p>Error...</p>;
 
   return (
-    <Container className='py-4'>
+    <Container className='relative py-4'>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -151,6 +158,17 @@ function AddBook() {
             Add Book
           </h1>
         </div>
+        {/* add book success */}
+        {showSuccess && (
+
+
+        <Alert className='fixed bg-[#079455] rounded-md  top-0 w-[291px] text-white right-[120px]'>
+          <AlertTitle className='flex justify-between items-center w-full'>
+            <p className='text-sm-semibold'>Add Success! </p>{' '}
+            <X className='size-4' />
+          </AlertTitle>
+        </Alert>
+        )}
 
         <div className='space-y-5'>
           {/* Title */}
