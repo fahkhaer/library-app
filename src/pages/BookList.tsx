@@ -4,15 +4,25 @@ import CardListUser from '@/components/ui/CardListUser';
 import { Command, CommandInput } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSearchStore } from '@/store/searchStore';
 import { Book } from '@/types/books';
 import { Link } from 'react-router-dom';
 
 function BookList() {
+  const { query, setQuery } = useSearchStore();
+
   const {
     data: booklist,
     isLoading: isLoadingBooks,
     error: errorBooks,
   } = GetBooklist();
+
+  const filteredBooks = (booklist || []).filter(
+    (book: Book) =>
+      book.title.toLowerCase().includes(query.toLowerCase()) ||
+      book.Author.name.toLowerCase().includes(query.toLowerCase()) ||
+      book.Category.name.toLowerCase().includes(query.toLowerCase())
+  );
 
   if (isLoadingBooks) return <p>Loading...</p>;
   if (errorBooks) return <p>Error loading data</p>;
@@ -32,7 +42,9 @@ function BookList() {
         <Command className='h-12 rounded-full justify-center border border-neutral-300 gap-2 px-4 md:min-w-[500px]'>
           <CommandInput
             className='text-neutral-600 text-sm '
-            placeholder='Search book '
+            placeholder='Search book'
+            value={query}
+            onValueChange={(value) => setQuery(value)}
           />
         </Command>
       </div>
@@ -79,7 +91,7 @@ function BookList() {
         </TabsList>
 
         {/* Card book list */}
-        {booklist.map((item: Book, i: number) => (
+        {filteredBooks.map((item: Book, i: number) => (
           <TabsContent key={i} value='all'>
             <CardListUser
               coverImage={item.coverImage}
