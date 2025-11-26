@@ -49,33 +49,36 @@ items-center'
       </Link>
 
       {/* SEARCH BAR - Navbar */}
-      <div className='hidden lg:block'>
-        <Command className='rounded-full justify-center h-22 border border-neutral-300 gap-2 px-4 md:min-w-[500px]'>
-          <CommandInput
-            className='text-neutral-600 text-sm '
-            placeholder='Search book'
-            onValueChange={(value) => setQuery(value)}
-          />
-        </Command>
-      </div>
+      {user.role !== 'ADMIN' && (
+        <div className='hidden lg:block'>
+          <Command className='rounded-full justify-center h-22 border border-neutral-300 gap-2 px-4 md:min-w-[500px]'>
+            <CommandInput
+              className='text-neutral-600 text-sm '
+              placeholder='Search book'
+              onValueChange={(value) => setQuery(value)}
+            />
+          </Command>
+        </div>
+      )}
 
       {/* Right Icons */}
       <div className='flex gap-6 items-center '>
         <Search className='lg:hidden block' />
-
-        <Link to={'/cart'}>
-          <div className='relative flex'>
-            <Icon
-              className='relative'
-              icon='lets-icons:bag-fill'
-              width='32'
-              height='32'
-            />
-            <Badge className='absolute hover:bg-red-700 left-5 bg-[#EE1D52] text-white h-5 min-w-5 text-center rounded-[833.33px] font-mono tabular-nums p-[6.67px]'>
-              1
-            </Badge>
-          </div>
-        </Link>
+        {user.role !== 'ADMIN' && (
+          <Link to={'/cart'}>
+            <div className='relative flex'>
+              <Icon
+                className='relative'
+                icon='lets-icons:bag-fill'
+                width='32'
+                height='32'
+              />
+              <Badge className='absolute hover:bg-red-700 left-5 bg-[#EE1D52] text-white h-5 min-w-5 text-center rounded-[833.33px] font-mono tabular-nums p-[6.67px]'>
+                1
+              </Badge>
+            </div>
+          </Link>
+        )}
 
         <div className='flex gap-4 items-center'>
           <Link
