@@ -148,14 +148,14 @@ function UserList() {
           {' '}
           <div className=''>
             {' '}
-            {users.map((user) => (
+            {filteredUsers.map((user: AdminUser, i: number) => (
               <div
-                key={user.no}
+                key={user.id}
                 className='bg-white shadow-card my-5 rounded-xl gap-5 p-4 text-sm-semibold leading-[28px]'
               >
                 {' '}
                 <div>
-                  <span className='font-semibold'>No:</span> {user.no}
+                  <span className='font-semibold'>No:</span> {i + 1}
                 </div>
                 <div>
                   <span className='font-semibold'>Name:</span> {user.name}
