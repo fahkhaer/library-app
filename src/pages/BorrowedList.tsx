@@ -5,11 +5,17 @@ import { Command, CommandInput } from '@/components/ui/command';
 import LoadMoreButton from '@/components/ui/LoadMoreButton';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSearchStore } from '@/store/searchStore';
 import { Loan } from '@/types/loans';
 import dayjs from 'dayjs';
 
 function BorrowedList() {
   const { data: loans, isLoading } = GetMyLoan();
+  const { query, setQuery } = useSearchStore();
+
+  const filteredLoans = (loans || []).filter((loan: Loan) =>
+    loan?.Book?.title?.toLowerCase().includes(query.toLowerCase())
+  );
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -25,6 +31,8 @@ function BorrowedList() {
           <CommandInput
             className='text-neutral-600 text-sm'
             placeholder='Search book'
+            value={query}
+            onValueChange={(value) => setQuery(value)}
           />
         </Command>
       </div>
@@ -66,7 +74,7 @@ function BorrowedList() {
         </TabsList>
 
         {/* Card book list */}
-        {loans.map((item: Loan, i: number) => (
+        {filteredLoans.map((item: Loan, i: number) => (
           <TabsContent
             key={i}
             className='flex mt-6 flex-col divide-neutral-300 bg-white p-5 gap-5 rounded-2xl'
