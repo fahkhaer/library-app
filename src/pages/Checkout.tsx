@@ -1,4 +1,3 @@
-import { useFetchUser } from '@/api/user/auth';
 import { Detailbook } from '@/api/user/booklist';
 import { AddLoan } from '@/api/user/loan';
 import Container from '@/components/layout/Container';
@@ -12,16 +11,19 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { RootState } from '@/redux/store';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
 function Checkout() {
   const { id } = useParams();
   const addLoan = AddLoan();
   const [date, setDate] = React.useState<Date | undefined>(undefined);
+    const user = useSelector((state: RootState) => state.auth.user);
+    
 
-  const { data: user, isLoading } = useFetchUser();
   const { data: detailBook, isLoading: isLoadingDetail } = Detailbook(
     Number(id)
   );
@@ -42,9 +44,7 @@ function Checkout() {
       }
     );
   };
-
-  if (isLoading || !user) return <p> Loading user...</p>;
-  if (isLoadingDetail) return <p> Loading detail...</p>;
+  if (isLoadingDetail && id) return <p> Loading detail...</p>;
 
   return (
     <Container className='pb-[100px]'>
@@ -58,12 +58,12 @@ function Checkout() {
 
             <div className='flex justify-between'>
               <h4>Name</h4>
-              <h3>{user.name}</h3>
+              <h3>{user?.name}</h3>
             </div>
 
             <div className='flex justify-between'>
               <h4>Email</h4>
-              <h3>{user.email}</h3>
+              <h3>{user?.email}</h3>
             </div>
 
             <div className='flex justify-between'>
