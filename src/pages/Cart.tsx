@@ -101,8 +101,20 @@ function Cart() {
               {selectedItems.length === 1 ? 'items' : 'item'}
             </h3>
           </div>
-          <Button className='w-full' variant={'secondary'}>
-            <Link to={'/checkout'}>Borrow Books</Link>
+          <Button
+            className='w-full'
+            variant={'secondary'}
+            disabled={selectedItems.length === 0}
+          >
+            <Link
+              to={selectedItems.length > 0 ? '/checkout' : '#'}
+              state={{ selectedItems }}
+              className={
+                selectedItems.length === 0 ? 'pointer-events-none' : ''
+              }
+            >
+              Borrow Books
+            </Link>
           </Button>
         </div>
       </div>
