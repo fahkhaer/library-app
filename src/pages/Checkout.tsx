@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { RootState } from '@/redux/store';
+import dayjs from 'dayjs';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -30,9 +31,8 @@ function Checkout() {
 
   const calculateReturnDate = () => {
     if (!date) return null;
-    const result = new Date(date);
-    result.setDate(result.getDate() + duration);
-    return result.toLocaleDateString();
+    const result = dayjs(date).add(duration, 'day');
+    return result.format('DD MMMM YYYY');
   };
 
   const handleClick = () => {
@@ -167,7 +167,7 @@ function Checkout() {
               Please return the book no later than
               <span className='text-[#EE1D52]'>
                 {' '}
-                {calculateReturnDate() || '—'}
+                {calculateReturnDate() || 'Please elect date'}
               </span>
             </p>
           </div>
