@@ -8,10 +8,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchStore } from '@/store/searchStore';
 import { Loan } from '@/types/loans';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 
 function BorrowedList() {
   const { data: loans, isLoading } = GetMyLoan();
   const { query, setQuery } = useSearchStore();
+  const [visibleCard, setVisibleCard] = useState(4);
 
   const filteredLoans = (loans || []).filter((loan: Loan) =>
     loan?.Book?.title?.toLowerCase().includes(query.toLowerCase())
@@ -20,6 +22,11 @@ function BorrowedList() {
   if (isLoading) return <p>Loading...</p>;
 
   if (!Array.isArray(loans)) return <p>No loans found</p>;
+
+  const handleLoadMore = () => {
+    setVisibleCard((prev) => prev + 2);
+  };
+  console.log(loans);
 
   return (
     <section className='flex flex-col mt-4 md:mt-6 gap-6 pb-[110px]'>
@@ -74,7 +81,8 @@ function BorrowedList() {
         </TabsList>
 
         {/* Card book list */}
-        {filteredLoans.map((item: Loan, i: number) => (
+
+        {filteredLoans.slice(0, visibleCard).map((item: Loan, i: number) => (
           <TabsContent
             key={i}
             className='flex mt-6 flex-col divide-neutral-300 bg-white p-5 gap-5 rounded-2xl'
@@ -120,7 +128,9 @@ function BorrowedList() {
         ))}
       </Tabs>
 
-      <LoadMoreButton />
+      {filteredLoans.length > visibleCard && (
+        <LoadMoreButton onClick={handleLoadMore} />
+      )}
     </section>
   );
 }
