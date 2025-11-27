@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { baseUrl } from './booklist';
 import axios from 'axios';
 
@@ -40,4 +40,22 @@ export const useAddCart = () => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const useDeleteCart = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const res = await axios.delete(`${baseUrl}/api/cart`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
 };
