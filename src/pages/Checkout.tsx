@@ -24,6 +24,7 @@ function Checkout() {
   const { id } = useParams();
   const addLoan = AddLoan();
   const [date, setDate] = React.useState<Date | undefined>(undefined);
+  const [calendarOpen, setCalendarOpen] = React.useState(false);
   const [duration, setDuration] = React.useState<number>(3);
   const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
@@ -144,8 +145,15 @@ function Checkout() {
           {/* Borrow Date */}
           <div className='flex flex-col space-y-2'>
             <h3>Borrow Date</h3>
-
-            <Popover>
+            <Popover
+              open={calendarOpen}
+              onOpenChange={(open) => {
+                setCalendarOpen(open);
+                if (open && !date) {
+                  setDate(new Date());
+                }
+              }}
+            >
               <PopoverTrigger>
                 <div className='bg-[#F5F5F5] border border-[#D5D7DA] w-full h-12 rounded-xl py-2 px-4 flex items-center justify-between cursor-pointer'>
                   <p className='text-md font-semibold'>
