@@ -1,4 +1,3 @@
-import { Detailbook } from '@/api/user/booklist';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Star } from 'lucide-react';
 import dayjs from 'dayjs';
@@ -10,12 +9,8 @@ interface ReviewersCardProps {
   review: Review;
 }
 function ReviewersCard({ review }: ReviewersCardProps) {
-  const { data, isLoading, error } = Detailbook(1);
-
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error...</p>;
-
   const star = review?.star ?? 0;
+  console.log(review);
 
   return (
     <div
@@ -36,7 +31,7 @@ function ReviewersCard({ review }: ReviewersCardProps) {
           />
         </Avatar>
         <div>
-          <h2>{data?.reviews?.[0].user.name}</h2>
+          <h2>{review?.User?.name}</h2>
           <p className='text-[#0A0D12] text-md-medium'>
             {dayjs(review?.createdAt).format('DD MMMM YYYY, HH:mm')}
           </p>
