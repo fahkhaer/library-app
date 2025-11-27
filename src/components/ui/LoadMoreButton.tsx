@@ -3,11 +3,13 @@ import { Button } from './button';
 
 type LoadMoreButtonProps = {
   className?: string;
+  onClick?: () => void;
 };
 
-function LoadMoreButton({ className }: LoadMoreButtonProps) {
+function LoadMoreButton({ className, onClick }: LoadMoreButtonProps) {
   return (
     <Button
+      onClick={onClick}
       className={cn(
         'mx-auto p-2 rounded-full flex items-center justify-center text-md-bold leading-7',
         'border border-neutral-300 hover:bg-neutral-400',

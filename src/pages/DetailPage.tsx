@@ -26,6 +26,7 @@ import { useState } from 'react';
 function DetailPage() {
   const addCart = useAddCart();
   const [showAlert, setShowAlert] = useState(false);
+  const [visibleReviews, setVisibleReviews] = useState(2);
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -68,6 +69,10 @@ function DetailPage() {
         },
       }
     );
+  };
+
+  const handleLoadMore = () => {
+    setVisibleReviews((prev) => prev + 2);
   };
 
   const relatedBooks = (allBooks || []).filter(
@@ -184,14 +189,14 @@ function DetailPage() {
             </span>
           </div>
         </div>
-
         <div className='flex flex-wrap gap-5'>
-          {data?.Review.map((review: Review) => (
+          {data?.Review.slice(0, visibleReviews).map((review: Review) => (
             <ReviewersCard key={review.id} review={review} />
           ))}
         </div>
-
-        <LoadMoreButton />
+        {data?.Review.length > visibleReviews && (
+          <LoadMoreButton onClick={handleLoadMore} />
+        )}
       </section>
 
       <div className='border-b my-6 md:my-16 border-neutral-300'></div>
