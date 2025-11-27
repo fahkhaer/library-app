@@ -19,6 +19,7 @@ import { Book } from '@/types/books';
 import { Link, useParams } from 'react-router-dom';
 import { useAddCart } from '@/api/user/cart';
 import axios from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 function DetailPage() {
   const addCart = useAddCart();
@@ -28,6 +29,7 @@ function DetailPage() {
 
   const { data, isLoading, error } = Detailbook(bookId);
   const { data: allBooks } = GetBooklist();
+const queryClient = useQueryClient();
 
   if (!id) return <p>Invalid book ID!</p>;
   if (isLoading) return <p>Loading...</p>;
@@ -42,6 +44,10 @@ function DetailPage() {
       {
         onSuccess: (data) => {
           console.log('Berhasil:', data);
+queryClient.invalidateQueries({
+  queryKey: ["cart"],
+});
+
         },
         onError: (err) => {
           if (axios.isAxiosError(err)) {

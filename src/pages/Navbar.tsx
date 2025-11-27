@@ -15,6 +15,7 @@ import { useAppDispatch } from '@/redux/store';
 import { logout } from '@/redux/slices/authSlice';
 import { useSelector } from 'react-redux';
 import { useSearchStore } from '@/store/searchStore';
+import { GetCart } from '@/api/user/cart';
 
 function Navbar() {
   const dispatch = useAppDispatch();
@@ -28,6 +29,9 @@ function Navbar() {
     dispatch(logout());
     navigate('/login');
   };
+
+  const { data } = GetCart();
+  const cartCount = data?.items?.length ?? '0';
 
   return (
     <div
@@ -73,9 +77,11 @@ items-center'
                 width='32'
                 height='32'
               />
-              <Badge className='absolute hover:bg-red-700 left-5 bg-[#EE1D52] text-white h-5 min-w-5 text-center rounded-[833.33px] font-mono tabular-nums p-[6.67px]'>
-                1
-              </Badge>
+              {data?.items?.length > 0 && (
+                <Badge className='absolute hover:bg-red-700 left-5 bg-[#EE1D52] text-white h-5 min-w-5 text-center rounded-[833.33px] font-mono tabular-nums p-[6.67px]'>
+                  {cartCount}
+                </Badge>
+              )}
             </div>
           </Link>
         )}
