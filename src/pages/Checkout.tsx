@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { RootState } from '@/redux/store';
+import { ApiError } from '@/types/apierror';
 import dayjs from 'dayjs';
 import { Calendar as CalendarIcon, X } from 'lucide-react';
 import React from 'react';
@@ -25,22 +26,18 @@ function Checkout() {
   const [date, setDate] = React.useState<Date | undefined>(undefined);
   const [duration, setDuration] = React.useState<number>(3);
   const user = useSelector((state: RootState) => state.auth.user);
+  const navigate = useNavigate();
 
   const { data: detailBook, isLoading: isLoadingDetail } = Detailbook(
     Number(id)
   );
 
-  const [errorMsg, setErrorMsg] = React.useState<{
-    success: boolean;
-    message: string;
-  } | null>(null);
+  const [errorMsg, setErrorMsg] = React.useState<ApiError | null>(null);
   const [showAlert, setShowAlert] = React.useState(false);
-  const navigate = useNavigate();
 
   const calculateReturnDate = () => {
     if (!date) return null;
-    const result = dayjs(date).add(duration, 'day');
-    return result.format('DD MMMM YYYY');
+    return dayjs(date).add(duration, 'day').format('DD MMMM YYYY');
   };
 
   const handleClick = () => {
@@ -55,23 +52,20 @@ function Checkout() {
         days: duration,
       },
       {
-        onSuccess: (data) => {
+        onSuccess: () => {
           const returnDate = calculateReturnDate();
-          console.log('Berhasil:', data);
-          navigate('/success', {
-            state: {
-              returnDate,
-            },
-          });
+          navigate('/success', { state: { returnDate } });
         },
-        onError: (err: any) => {
-          console.log('RAW ERROR:', err);
+        onError: (err: unknown) => {
+          const apiErr: ApiError | undefined = (
+            err as { response?: { data?: ApiError } }
+          )?.response?.data;
 
-          const apiErr = err?.response?.data;
-
-          console.log('ERROR RESPONSE:', apiErr);
-
-          setErrorMsg(apiErr);
+          if (apiErr) {
+            setErrorMsg(apiErr);
+          } else {
+            setErrorMsg({ message: 'Something went wrong', success: false });
+          }
           setShowAlert(true);
         },
       }
@@ -158,26 +152,14 @@ function Checkout() {
               onValueChange={(value) => setDuration(Number(value))}
               className='space-y-2'
             >
-              <div className='flex items-center space-x-2'>
-                <RadioGroupItem value='3' id='r3' />
-                <label className='text-md font-semibold' htmlFor='r3'>
-                  3 Days
-                </label>
-              </div>
-
-              <div className='flex items-center space-x-2'>
-                <RadioGroupItem value='5' id='r5' />
-                <label className='text-md font-semibold' htmlFor='r5'>
-                  5 Days
-                </label>
-              </div>
-
-              <div className='flex items-center space-x-2'>
-                <RadioGroupItem value='10' id='r10' />
-                <label className='text-md font-semibold' htmlFor='r10'>
-                  10 Days
-                </label>
-              </div>
+              {[3, 5, 10].map((d) => (
+                <div key={d} className='flex items-center space-x-2'>
+                  <RadioGroupItem value={d.toString()} id={`r${d}`} />
+                  <label className='text-md font-semibold' htmlFor={`r${d}`}>
+                    {d} Days
+                  </label>
+                </div>
+              ))}
             </RadioGroup>
           </div>
 
