@@ -9,33 +9,42 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/layout/Container';
-import { Share2, Star } from 'lucide-react';
+import { Share2, Star, X } from 'lucide-react';
 import LoadMoreButton from '@/components/ui/LoadMoreButton';
 import Card from '@/components/ui/Card';
 import { Detailbook, GetBooklist } from '@/api/user/booklist';
 import ReviewersCard from '@/components/ui/ReviewersCard';
 import { Review } from '@/types/reviews';
 import { Book } from '@/types/books';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAddCart } from '@/api/user/cart';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
+import { Alert, AlertTitle } from '@/components/ui/alert';
+import { useState } from 'react';
 
 function DetailPage() {
   const addCart = useAddCart();
+  const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
 
   const { id } = useParams();
   const bookId = Number(id);
 
   const { data, isLoading, error } = Detailbook(bookId);
   const { data: allBooks } = GetBooklist();
-const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   if (!id) return <p>Invalid book ID!</p>;
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error...</p>;
 
   const handleSubmit = () => {
+    if (data.stock === 0) {
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 2000);
+      return;
+    }
     addCart?.mutate(
       {
         bookId: bookId,
@@ -44,10 +53,10 @@ const queryClient = useQueryClient();
       {
         onSuccess: (data) => {
           console.log('Berhasil:', data);
-queryClient.invalidateQueries({
-  queryKey: ["cart"],
-});
-
+          queryClient.invalidateQueries({
+            queryKey: ['cart'],
+          });
+          navigate('/cart');
         },
         onError: (err) => {
           if (axios.isAxiosError(err)) {
@@ -119,7 +128,11 @@ queryClient.invalidateQueries({
               <span className='text-md-semibold ml-1'>{data?.rating}</span>
             </div>
 
-            <Statistics rating={data?.rating} review={data?.reviewCount} />
+            <Statistics
+              stock={data?.stock}
+              rating={data?.rating}
+              review={data?.reviewCount}
+            />
           </div>
 
           <div className='border-t border-neutral-300'></div>
@@ -131,7 +144,7 @@ queryClient.invalidateQueries({
 
           <div className='flex gap-2 items-center h-12'>
             <Button onClick={handleSubmit} className='w-40' variant={'outline'}>
-              <Link to={'/cart'}>Add to Cart</Link>
+              Add to Cart
             </Button>
             <Link to={`/checkout/${bookId}`}>
               <Button className='w-40' variant={'secondary'}>
@@ -144,6 +157,17 @@ queryClient.invalidateQueries({
           </div>
         </div>
       </div>
+      {showAlert && (
+        <Alert className='fixed bg-red-700 rounded-md  top-20 w-[291px] text-white right-[120px]'>
+          <AlertTitle className='flex justify-between items-center w-full'>
+            <p className='text-sm-semibold'>Out of Stock! </p>{' '}
+            <X
+              onClick={() => setShowAlert(false)}
+              className='cursor pointer size-4'
+            />
+          </AlertTitle>
+        </Alert>
+      )}
 
       <div className='border-b my-6 md:my-16 border-neutral-300'></div>
 
@@ -211,14 +235,16 @@ type Statistic = {
 type StatisticsProps = {
   review: number;
   rating: number;
+  stock: number;
 };
 
-const Statistics = ({ review, rating }: StatisticsProps) => {
+const Statistics = ({ review, rating, stock }: StatisticsProps) => {
   const statistics: Statistic[] = [
-    { data: '320', info: 'Page' },
+    { data: stock, info: 'Stock' },
     { data: rating, info: 'Rating' },
     { data: review, info: 'Reviews' },
   ];
+
   return (
     <div className='mt-[22px] w-full md:w-[173px] flex  items-left divide-neutral-300 flex-row divide-x'>
       {statistics.map((statistic) => (
