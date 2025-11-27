@@ -39,8 +39,8 @@ function AddBook() {
     coverImage: '',
     authorId: 0,
     categoryId: 0,
-    totalCopies: 1,
-    availableCopies: 1,
+    totalCopies: 5,
+    availableCopies: 5,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -74,8 +74,8 @@ function AddBook() {
         coverImage: form.coverImage,
         authorId: form.authorId,
         categoryId: form.categoryId,
-        totalCopies: 1,
-        availableCopies: 1,
+        totalCopies: 5,
+        availableCopies: 5,
       },
       {
         onSuccess: (data) => {
@@ -119,7 +119,7 @@ function AddBook() {
           console.log('Berhasil:', data);
           setApiError(null);
           setShowSuccess(true);
-          setTimeout(() => setShowSuccess(false));
+          setTimeout(() => setShowSuccess(false), 3000);
         },
         onError: (err: unknown) => {
           if (err instanceof AxiosError) {

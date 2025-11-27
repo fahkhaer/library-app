@@ -40,13 +40,13 @@ function UserList() {
     error: errorPages,
   } = GetUsersPage();
 
-  const pagedUsers: AdminUser[] = pages?.users || [];
-  const totalPages = pages?.totalPages || 1;
+  // const pagedUsers: AdminUser[] = pages?.users || [];
+  // const totalPages = pages?.totalPages || 1;
   const totalEntries = pages?.total || 0;
   const limit = pages?.limit || 10;
 
-  const filteredUsers = users.filter((user: AdminUser) =>
-    user.name.toLowerCase().includes(query.toLowerCase())
+  const filteredUsers = (users || []).filter((user: AdminUser) =>
+    user.name?.toLowerCase().includes(query.toLowerCase())
   );
 
   if (loadingUsers || loadingPages) return <p>Loading...</p>;

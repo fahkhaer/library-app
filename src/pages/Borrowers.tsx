@@ -57,9 +57,9 @@ function Borrowers() {
             <div className='border-t-2  border-neutral-300 w-full'> </div>
             <CardListBorrowed
               variant='asAdmin'
-              genre=''
+              // genre=''
               title='{}'
-              author='{}'
+              // author='{}'
               image=''
               rating={0}
               date=''

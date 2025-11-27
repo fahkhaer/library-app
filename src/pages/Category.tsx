@@ -102,7 +102,7 @@ function Category() {
           <Link key={item.id} to={`/detail/${item.id}`} className='block'>
             <Card
               name={item.title}
-              author={item.author.name}
+              author={item.Author.name}
               image={item.coverImage}
               rating={item.rating}
             />

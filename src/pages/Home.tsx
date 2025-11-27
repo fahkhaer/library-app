@@ -84,7 +84,7 @@ function Home() {
         </div>
       )}
 
-      {/* Recommendation */}
+      {/* Recomendation */}
       <h1 className='text-lg font-bold mb-5'>
         {query.trim().length > 0 ? 'Search Results' : 'Recommendation'}
       </h1>
