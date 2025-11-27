@@ -58,12 +58,12 @@ function Borrowers() {
             <CardListBorrowed
               variant='asAdmin'
               // genre=''
-              title='{}'
+              title='not found'
               // author='{}'
-              image=''
+              image='/cover-off.png'
               rating={0}
-              date=''
-              duration=''
+              date='not found'
+              duration='not found'
             />{' '}
           </TabsContent>
         </Tabs>

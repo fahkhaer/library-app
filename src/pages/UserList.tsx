@@ -52,8 +52,8 @@ function UserList() {
   if (loadingUsers || loadingPages) return <p>Loading...</p>;
   if (errorUsers || errorPages) return <p>Error loading users</p>;
 
-  console.log(pages);
 
+  
   return (
     <section className='flex flex-col mt-6 gap-6 pb-[110px]'>
       <h1>User</h1>

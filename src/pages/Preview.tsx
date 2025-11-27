@@ -10,7 +10,6 @@ function Preview() {
   const bookId = Number(id);
 
   const { data, isLoading, error } = Detailbook(bookId);
-console.log(bookId);
 
   if (!id) return <p>Invalid book ID!</p>;
   if (isLoading) return <p>Loading...</p>;

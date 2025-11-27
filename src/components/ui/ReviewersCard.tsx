@@ -10,7 +10,6 @@ interface ReviewersCardProps {
 }
 function ReviewersCard({ review }: ReviewersCardProps) {
   const star = review?.star ?? 0;
-  console.log(review);
 
   return (
     <div

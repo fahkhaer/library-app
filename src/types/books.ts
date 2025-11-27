@@ -31,6 +31,7 @@ export type Book = {
   updatedAt: string;
   Author: Author;
   Category: Category;
+  isActive: boolean;
 };
 
 export type AddBookForm = {

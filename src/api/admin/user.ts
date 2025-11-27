@@ -35,7 +35,6 @@ export function GetUsersPage() {
         },
       });
 
-      console.log(res.data.data.pagination);
       return res.data.data.pagination;
     },
     refetchOnWindowFocus: true,

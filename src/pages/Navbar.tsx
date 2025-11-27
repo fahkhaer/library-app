@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, Search } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '@/redux/store';
+import { RootState, useAppDispatch } from '@/redux/store';
 import { logout } from '@/redux/slices/authSlice';
 import { useSelector } from 'react-redux';
 import { useSearchStore } from '@/store/searchStore';
@@ -20,8 +20,8 @@ import { GetCart } from '@/api/user/cart';
 function Navbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
   const username = localStorage.getItem('username');
-  const user = useSelector((state: any) => state.auth.user);
 
   const { setQuery } = useSearchStore();
 
@@ -53,7 +53,7 @@ items-center'
       </Link>
 
       {/* SEARCH BAR - Navbar */}
-      {user.role !== 'ADMIN' && (
+      {user?.role !== 'ADMIN' && (
         <div className='hidden lg:block'>
           <Command className='rounded-full justify-center h-22 border border-neutral-300 gap-2 px-4 md:min-w-[500px]'>
             <CommandInput
@@ -68,7 +68,7 @@ items-center'
       {/* Right Icons */}
       <div className='flex gap-6 items-center '>
         <Search className='lg:hidden block' />
-        {user.role !== 'ADMIN' && (
+        {user?.role !== 'ADMIN' && (
           <Link to={'/cart'}>
             <div className='relative flex'>
               <Icon
@@ -89,9 +89,9 @@ items-center'
         <div className='flex gap-4 items-center'>
           <Link
             to={
-              user.role === 'ADMIN'
+              user?.role === 'ADMIN'
                 ? '/admin'
-                : user.role === 'USER'
+                : user?.role === 'USER'
                 ? '/user'
                 : '/'
             }
@@ -111,7 +111,7 @@ items-center'
             <DropdownMenuContent className='bg-white'>
               <DropdownMenuSeparator />
 
-              {user.role === 'ADMIN' ? (
+              {user?.role === 'ADMIN' ? (
                 <>
                   <Link to='admin?tab=borrowers'>
                     <DropdownMenuItem>Borrowed List</DropdownMenuItem>

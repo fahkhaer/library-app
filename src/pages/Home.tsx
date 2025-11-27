@@ -85,11 +85,11 @@ function Home() {
       )}
 
       {/* Recomendation */}
-      <h1 className='text-lg font-bold mb-5'>
+      <h1 className='text-lg font-bold my-5'>
         {query.trim().length > 0 ? 'Search Results' : 'Recommendation'}
       </h1>
 
-      <div className='flex flex-wrap gap-2 md:gap-5 w-full max-w-screen-xl mx-auto'>
+      <div className='flex flex-wrap gap-2 mb-5 md:gap-5 w-full max-w-screen-xl mx-auto'>
         {filteredBooks.map((item: Book) => (
           <Link
             key={item.id}
