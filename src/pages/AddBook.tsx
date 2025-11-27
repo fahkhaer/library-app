@@ -160,14 +160,15 @@ function AddBook() {
         </div>
         {/* add book success */}
         {showSuccess && (
-
-
-        <Alert className='fixed bg-[#079455] rounded-md  top-0 w-[291px] text-white right-[120px]'>
-          <AlertTitle className='flex justify-between items-center w-full'>
-            <p className='text-sm-semibold'>Add Success! </p>{' '}
-            <X className='size-4' />
-          </AlertTitle>
-        </Alert>
+          <Alert className='fixed bg-[#079455] rounded-md  top-0 w-[291px] text-white right-[120px]'>
+            <AlertTitle className='flex justify-between items-center w-full'>
+              <p className='text-sm-semibold'>Add Success! </p>{' '}
+              <X
+                onClick={() => setShowSuccess(false)}
+                className='cursor pointer size-4'
+              />
+            </AlertTitle>
+          </Alert>
         )}
 
         <div className='space-y-5'>
@@ -305,7 +306,13 @@ function AddBook() {
               <p className='text-[#EE1D52] text-sm-medium'>{errors.cover}</p>
             )}
           </div>
-
+          <Input
+            type='text'
+            placeholder='Or paste image URL'
+            // value={}
+            // onChange={(e) => setCoverUrl(e.target.value)}
+            className='flex-1 h-12 rounded-xl px-4 border border-neutral-300'
+          />
           <Button type='submit' className='w-full' variant='secondary'>
             Save
           </Button>
