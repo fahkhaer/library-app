@@ -18,6 +18,8 @@ import { GetCategories } from '@/api/user/categories';
 import { GetAuthors } from '@/api/user/authors';
 import { Detailbook } from '@/api/user/booklist';
 import { Alert, AlertTitle } from '@/components/ui/alert';
+import { AxiosError } from 'axios';
+import { ApiError } from '@/types/apierror';
 
 function AddBook() {
   const { id } = useParams();
@@ -37,12 +39,12 @@ function AddBook() {
     coverImage: '',
     authorId: 0,
     categoryId: 0,
-    totalCopies: 0,
-    availableCopies: 0,
+    totalCopies: 1,
+    availableCopies: 1,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
+  const [apiError, setApiError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const validate = () => {
@@ -51,10 +53,9 @@ function AddBook() {
     if (!form.title) err.title = 'Title is required';
     if (!form.authorId) err.authorId = 'Author is required';
     if (!form.categoryId) err.category = 'Category is required';
-    // if (!form.pages || form.pages <= 0)
-    // err.pages = 'Number of pages must be > 0';
     if (!form.description) err.description = 'Description is required';
-    // if (!form.cover) err.cover = 'Cover image is required';
+    if (!form.isbn) err.isbn = 'ISBN is required';
+    if (!form.coverImage) err.coverImage = 'Cover image is required';
 
     setErrors(err);
     return Object.keys(err).length === 0;
@@ -68,9 +69,9 @@ function AddBook() {
       {
         title: form.title,
         description: form.description,
-        isbn: 'fgjkugv',
+        isbn: form.isbn,
         publishedYear: 2000,
-        coverImage: 'string',
+        coverImage: form.coverImage,
         authorId: form.authorId,
         categoryId: form.categoryId,
         totalCopies: 1,
@@ -79,17 +80,24 @@ function AddBook() {
       {
         onSuccess: (data) => {
           console.log('Berhasil:', data);
+          setApiError(null);
           setShowSuccess(true);
           setTimeout(() => setShowSuccess(false), 3000);
         },
-        onError: (err) => {
-          console.log('Error:', err);
+        onError: (err: unknown) => {
+          if (err instanceof AxiosError) {
+            const apiErr = err.response?.data as ApiError;
+            setApiError(apiErr?.message || 'Unknown error');
+          } else {
+            setApiError('Unknown error');
+          }
         },
       }
     );
 
     console.log('READY TO SEND:', form);
   };
+
   const handleEdit = () => {
     editBook.mutate(
       {
@@ -97,9 +105,9 @@ function AddBook() {
         payload: {
           title: form.title,
           description: form.description,
-          isbn: 'gfjfffgjkugv',
+          isbn: form.isbn,
           publishedYear: 2000,
-          coverImage: 'string',
+          coverImage: form.coverImage,
           authorId: form.authorId,
           categoryId: form.categoryId,
           totalCopies: 1,
@@ -109,15 +117,22 @@ function AddBook() {
       {
         onSuccess: (data) => {
           console.log('Berhasil:', data);
+          setApiError(null);
           setShowSuccess(true);
           setTimeout(() => setShowSuccess(false));
         },
-        onError: (err) => {
-          console.log('Error:', err);
+        onError: (err: unknown) => {
+          if (err instanceof AxiosError) {
+            const apiErr = err.response?.data as ApiError;
+            setApiError(apiErr?.message || 'Unknown error');
+          } else {
+            setApiError('Unknown error');
+          }
         },
       }
     );
   };
+
   useEffect(() => {
     if (id && detailBookData) {
       setForm({
@@ -170,6 +185,17 @@ function AddBook() {
             </AlertTitle>
           </Alert>
         )}
+        {apiError && (
+          <Alert className='fixed bg-red-700 rounded-md  top-20 w-[291px] text-white right-[120px]'>
+            <AlertTitle className='flex justify-between items-center w-full'>
+              <p className='text-sm-semibold'>{apiError} </p>{' '}
+              <X
+                onClick={() => setShowSuccess(false)}
+                className='cursor pointer size-4'
+              />
+            </AlertTitle>
+          </Alert>
+        )}
 
         <div className='space-y-5'>
           {/* Title */}
@@ -185,7 +211,6 @@ function AddBook() {
               <p className='text-[#EE1D52] text-sm-medium'>{errors.title}</p>
             )}
           </div>
-
           {/* Author */}
           <div>
             <label className='block mb-1 text-sm font-bold'>Author</label>
@@ -210,7 +235,6 @@ function AddBook() {
               <p className='text-[#EE1D52] text-sm-medium'>{errors.authorId}</p>
             )}
           </div>
-
           {/* Category */}
           <div>
             <label className='block mb-1 text-sm font-bold'>Category</label>
@@ -236,7 +260,6 @@ function AddBook() {
               <p className='text-[#EE1D52] text-sm-medium'>{errors.category}</p>
             )}
           </div>
-
           {/* Pages */}
           {/* <div>
             <label className='block mb-1 text-sm font-bold'>
@@ -254,7 +277,6 @@ function AddBook() {
               <p className='text-[#EE1D52] text-sm-medium'>{errors.pages}</p>
             )}
           </div> */}
-
           {/* Description */}
           <div>
             <label className='block mb-1 text-sm font-bold'>Description</label>
@@ -271,7 +293,6 @@ function AddBook() {
               </p>
             )}
           </div>
-
           {/* Cover */}
           <div>
             <label className='block mb-1 text-sm font-bold'>Cover Image</label>
@@ -306,13 +327,30 @@ function AddBook() {
               <p className='text-[#EE1D52] text-sm-medium'>{errors.cover}</p>
             )}
           </div>
+          {/* image link */}
           <Input
             type='text'
             placeholder='Or paste image URL'
-            // value={}
-            // onChange={(e) => setCoverUrl(e.target.value)}
+            value={form.coverImage}
+            onChange={(e) => setForm({ ...form, coverImage: e.target.value })}
             className='flex-1 h-12 rounded-xl px-4 border border-neutral-300'
           />
+          {errors.coverImage && (
+            <p className='text-[#EE1D52] text-sm-medium'>{errors.coverImage}</p>
+          )}
+          {/* ISBN */}
+          <div>
+            <label className='block mb-1 text-sm font-bold'>ISBN</label>
+            <Input
+              type='text'
+              className='h-12 border-neutral-300 rounded-xl px-4'
+              value={form.isbn}
+              onChange={(e) => setForm({ ...form, isbn: e.target.value })}
+            />
+            {errors.isbn && (
+              <p className='text-[#EE1D52] text-sm-medium'>{errors.isbn}</p>
+            )}
+          </div>
           <Button type='submit' className='w-full' variant='secondary'>
             Save
           </Button>
