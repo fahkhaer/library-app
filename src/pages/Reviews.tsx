@@ -53,7 +53,7 @@ function Reviews() {
               />
             </div>
 
-            <div className='flex flex-col gap-2 pt-5'>
+            <div className='flex flex-col gap-2 pt-5 '>
               <div className='flex'>
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
