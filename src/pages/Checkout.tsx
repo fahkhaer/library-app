@@ -21,18 +21,30 @@ function Checkout() {
   const { id } = useParams();
   const addLoan = AddLoan();
   const [date, setDate] = React.useState<Date | undefined>(undefined);
-    const user = useSelector((state: RootState) => state.auth.user);
-    
+  const [duration, setDuration] = React.useState<number>(3);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const { data: detailBook, isLoading: isLoadingDetail } = Detailbook(
     Number(id)
   );
 
+  const calculateReturnDate = () => {
+    if (!date) return null;
+    const result = new Date(date);
+    result.setDate(result.getDate() + duration);
+    return result.toLocaleDateString();
+  };
+
   const handleClick = () => {
+    if (!date) {
+      alert('Please select borrow date first!');
+      return;
+    }
+
     addLoan.mutate(
       {
         bookId: Number(id),
-        days: 3,
+        days: duration,
       },
       {
         onSuccess: (data) => {
@@ -44,6 +56,7 @@ function Checkout() {
       }
     );
   };
+
   if (isLoadingDetail && id) return <p> Loading detail...</p>;
 
   return (
@@ -119,7 +132,11 @@ function Checkout() {
           <div className='space-y-3'>
             <h3>Borrow Duration</h3>
 
-            <RadioGroup defaultValue='3' className='space-y-2'>
+            <RadioGroup
+              defaultValue='3'
+              onValueChange={(value) => setDuration(Number(value))}
+              className='space-y-2'
+            >
               <div className='flex items-center space-x-2'>
                 <RadioGroupItem value='3' id='r3' />
                 <label className='text-md font-semibold' htmlFor='r3'>
@@ -148,7 +165,10 @@ function Checkout() {
             <h3>Return Date</h3>
             <p className='text-md-medium text-neutral-950'>
               Please return the book no later than
-              <span className='text-[#EE1D52]'> 31 August 2025</span>
+              <span className='text-[#EE1D52]'>
+                {' '}
+                {calculateReturnDate() || '—'}
+              </span>
             </p>
           </div>
 
