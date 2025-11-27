@@ -121,7 +121,7 @@ function BorrowedList() {
                     borrowedAt.setHours(0, 0, 0, 0)) /
                     (1000 * 60 * 60 * 24)
                 );
-                return `duration ${diffDays} days`;
+                return ` Duration ${diffDays} Days`;
               })()}
             />
           </TabsContent>
