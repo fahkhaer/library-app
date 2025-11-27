@@ -12,7 +12,7 @@ export interface Review {
   userId: number;
   bookId: number;
   createdAt: string;
-  user: User;
+  User: User;
   Book: Pick<Book, 'id' | 'title' | 'coverImage'>;
   title: string;
   coverImage: string | null;
