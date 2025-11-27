@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 
 function BookList() {
   const { query, setQuery } = useSearchStore();
-
   const {
     data: booklist,
     isLoading: isLoadingBooks,
@@ -26,6 +25,19 @@ function BookList() {
 
   if (isLoadingBooks) return <p>Loading...</p>;
   if (errorBooks) return <p>Error loading data</p>;
+
+  const tabFilters = {
+    all: filteredBooks,
+    available: filteredBooks.filter((b: Book) => b.availableCopies > 0),
+    borrowed: filteredBooks.filter(
+      (b: Book) => b.availableCopies === 0 && b.borrowCount > 0
+    ),
+    returned: filteredBooks.filter(
+      (b: Book) => b.availableCopies > 0 && b.borrowCount > 0
+    ),
+    damaged: filteredBooks.filter((b: Book) => !b.isActive),
+  };
+
   return (
     <section className='flex flex-col mt-6 gap-6 pb-[110px]'>
       <h1>Book List</h1>
@@ -34,14 +46,14 @@ function BookList() {
           variant='default'
           className='bg-[#1C65DA] hover:bg-blue-900 text-neutral-25 w-60 rounded-full p-2'
         >
-          <h3>Add Book </h3>{' '}
+          <h3>Add Book </h3>
         </Button>
       </Link>
       {/* search bar */}
       <div className='w-full md:w-[600px]'>
         <Command className='h-12 rounded-full justify-center border border-neutral-300 gap-2 px-4 md:min-w-[500px]'>
           <CommandInput
-            className='text-neutral-600 text-sm '
+            className='text-neutral-600 text-sm'
             placeholder='Search book'
             value={query}
             onValueChange={(value) => setQuery(value)}
@@ -91,16 +103,23 @@ function BookList() {
         </TabsList>
 
         {/* Card book list */}
-        {filteredBooks.map((item: Book, i: number) => (
-          <TabsContent key={i} value='all'>
-            <CardListUser
-              coverImage={item.coverImage}
-              genre={item.Category.name}
-              title={item.title}
-              author={item.Author.name}
-              rating={item.rating}
-              bookId={item.id}
-            />
+        {Object.entries(tabFilters).map(([key, books]) => (
+          <TabsContent key={key} value={key}>
+            {books.length === 0 ? (
+              <p>No books found.</p>
+            ) : (
+              books.map((item: Book, i: number) => (
+                <CardListUser
+                  key={i}
+                  coverImage={item.coverImage}
+                  genre={item.Category.name}
+                  title={item.title}
+                  author={item.Author.name}
+                  rating={item.rating}
+                  bookId={item.id}
+                />
+              ))
+            )}
           </TabsContent>
         ))}
       </Tabs>
