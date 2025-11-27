@@ -35,6 +35,20 @@ function Checkout() {
   const [errorMsg, setErrorMsg] = React.useState<ApiError | null>(null);
   const [showAlert, setShowAlert] = React.useState(false);
 
+  const [checkedItems, setCheckedItems] = React.useState<{
+    [key: string]: boolean;
+  }>({
+    b1: false,
+    c1: false,
+    c2: false,
+  });
+
+  const handleCheckboxChange = (id: string, value: boolean) => {
+    setCheckedItems((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const allChecked = Object.values(checkedItems).every(Boolean);
+
   const calculateReturnDate = () => {
     if (!date) return null;
     return dayjs(date).add(duration, 'day').format('DD MMMM YYYY');
@@ -104,8 +118,12 @@ function Checkout() {
           <div>
             <p className='text-display-xs pt-8 font-bold'>Book List</p>
 
-            <div className='flex py-6 w-full gap-4'>
-              <Checkbox id='b1' />
+            <div className='flex py-6 w-full gap-4 items-center'>
+              <Checkbox
+                id='b1'
+                checked={checkedItems['b1']}
+                onCheckedChange={(val) => handleCheckboxChange('b1', !!val)}
+              />
 
               <CardList
                 bookId={Number(id)}
@@ -178,14 +196,22 @@ function Checkout() {
           {/* Agreements */}
           <div className='space-y-2'>
             <div className='flex items-center space-x-2'>
-              <Checkbox id='c1' />
+              <Checkbox
+                id='c1'
+                checked={checkedItems['c1']}
+                onCheckedChange={(val) => handleCheckboxChange('c1', !!val)}
+              />
               <label className='text-md font-semibold' htmlFor='c1'>
                 I agree to return the book(s) before the due date.
               </label>
             </div>
 
             <div className='flex items-center space-x-2'>
-              <Checkbox id='c2' />
+              <Checkbox
+                id='c2'
+                checked={checkedItems['c2']}
+                onCheckedChange={(val) => handleCheckboxChange('c2', !!val)}
+              />
               <label className='text-md font-semibold' htmlFor='c2'>
                 I accept the library borrowing policy.
               </label>
@@ -193,7 +219,12 @@ function Checkout() {
           </div>
 
           {/* Button */}
-          <Button onClick={handleClick} className='w-full' variant='secondary'>
+          <Button
+            onClick={handleClick}
+            className='w-full'
+            variant='secondary'
+            disabled={!allChecked}
+          >
             Confirm & Borrow
           </Button>
         </div>
