@@ -1,6 +1,7 @@
 import { Detailbook } from '@/api/user/booklist';
 import { AddLoan } from '@/api/user/loan';
 import Container from '@/components/layout/Container';
+import { Alert, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import CardList from '@/components/ui/CardList';
@@ -13,10 +14,10 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { RootState } from '@/redux/store';
 import dayjs from 'dayjs';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, X } from 'lucide-react';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 function Checkout() {
   const { id } = useParams();
@@ -28,6 +29,13 @@ function Checkout() {
   const { data: detailBook, isLoading: isLoadingDetail } = Detailbook(
     Number(id)
   );
+
+  const [errorMsg, setErrorMsg] = React.useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
+  const [showAlert, setShowAlert] = React.useState(false);
+  const navigate = useNavigate();
 
   const calculateReturnDate = () => {
     if (!date) return null;
@@ -49,9 +57,17 @@ function Checkout() {
       {
         onSuccess: (data) => {
           console.log('Berhasil:', data);
+          navigate('/success');
         },
-        onError: (err) => {
-          console.log('Error:', err);
+        onError: (err: any) => {
+          console.log('RAW ERROR:', err);
+
+          const apiErr = err?.response?.data;
+
+          console.log('ERROR RESPONSE:', apiErr);
+
+          setErrorMsg(apiErr);
+          setShowAlert(true);
         },
       }
     );
@@ -167,7 +183,7 @@ function Checkout() {
               Please return the book no later than
               <span className='text-[#EE1D52]'>
                 {' '}
-                {calculateReturnDate() || 'Please elect date'}
+                {calculateReturnDate() || 'Please select date'}
               </span>
             </p>
           </div>
@@ -191,9 +207,20 @@ function Checkout() {
 
           {/* Button */}
           <Button onClick={handleClick} className='w-full' variant='secondary'>
-            <Link to={'/success'}>Confirm & Borrow</Link>
+            Confirm & Borrow
           </Button>
         </div>
+        {showAlert && errorMsg && (
+          <Alert className='fixed bg-red-700 rounded-md top-20 w-[291px] text-white right-[120px] z-50'>
+            <AlertTitle className='flex justify-between items-center w-full'>
+              <p className='text-sm-semibold'>{errorMsg.message}</p>
+              <X
+                onClick={() => setShowAlert(false)}
+                className='cursor-pointer size-4'
+              />
+            </AlertTitle>
+          </Alert>
+        )}
       </div>
     </Container>
   );
