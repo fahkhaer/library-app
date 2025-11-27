@@ -1,7 +1,7 @@
 import Container from '@/components/layout/Container';
 import { Button } from '@/components/ui/button';
 import { CheckIcon } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 function Success() {
   const location = useLocation();
@@ -34,7 +34,9 @@ function Success() {
             </p>
           </div>
           <Button variant={'secondary'} className='h-12 min-w-[268px]'>
-            <h3>See Borrowed List</h3>
+            <Link to='/user?tab=borrowedlist'>
+              <h3>See Borrowed List</h3>
+            </Link>
           </Button>
         </div>
       </div>
