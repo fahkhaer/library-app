@@ -1,8 +1,11 @@
 import Container from '@/components/layout/Container';
 import { Button } from '@/components/ui/button';
 import { CheckIcon } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 function Success() {
+  const location = useLocation();
+  const returnDate: string = location.state?.returnDate || 'N/A';
   return (
     <Container className='h-screen flex items-center'>
       <div className='w-full mx-auto flex justify-center'>
@@ -27,7 +30,7 @@ function Success() {
             </p>
             <p className='md:text-lg text-md font-semibold leading-8'>
               Your book has been successfully borrowed. Please return it by
-              <span className='text-[#EE1D52]'> 31 August 2025</span>
+              <span className='text-[#EE1D52]'> {returnDate}</span>
             </p>
           </div>
           <Button variant={'secondary'} className='h-12 min-w-[268px]'>

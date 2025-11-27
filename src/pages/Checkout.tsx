@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
 import { Calendar as CalendarIcon, X } from 'lucide-react';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Checkout() {
   const { id } = useParams();
@@ -56,8 +56,13 @@ function Checkout() {
       },
       {
         onSuccess: (data) => {
+          const returnDate = calculateReturnDate();
           console.log('Berhasil:', data);
-          navigate('/success');
+          navigate('/success', {
+            state: {
+              returnDate,
+            },
+          });
         },
         onError: (err: any) => {
           console.log('RAW ERROR:', err);
