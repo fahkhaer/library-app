@@ -15,18 +15,30 @@ function BorrowedList() {
   const { query, setQuery } = useSearchStore();
   const [visibleCard, setVisibleCard] = useState(4);
 
-  const filteredLoans = (loans || []).filter((loan: Loan) =>
+  if (isLoading) return <p>Loading...</p>;
+  if (!Array.isArray(loans)) return <p>No loans found</p>;
+
+  const filteredLoans = loans.filter((loan: Loan) =>
     loan?.Book?.title?.toLowerCase().includes(query.toLowerCase())
   );
 
-  if (isLoading) return <p>Loading...</p>;
+  const today = new Date();
 
-  if (!Array.isArray(loans)) return <p>No loans found</p>;
-
-  const handleLoadMore = () => {
-    setVisibleCard((prev) => prev + 2);
+  const tabFilters = {
+    all: filteredLoans,
+    active: filteredLoans.filter(
+      (l: Loan) => l.status === 'BORROWED' && !l.returnedAt
+    ),
+    returned: filteredLoans.filter(
+      (l: Loan) => l.status === 'RETURNED' && l.returnedAt
+    ),
+    overdue: filteredLoans.filter(
+      (l: Loan) =>
+        l.status === 'BORROWED' && !l.returnedAt && new Date(l.dueAt) < today
+    ),
   };
-  console.log(loans);
+
+  const handleLoadMore = () => setVisibleCard((prev) => prev + 2);
 
   return (
     <section className='flex flex-col mt-4 md:mt-6 gap-6 pb-[110px]'>
@@ -63,7 +75,6 @@ function BorrowedList() {
             </TabsTrigger>
           </TabsList>
         </ScrollArea>
-
         {/* desktop */}
         <TabsList className='hidden md:flex md:w-fit gap-3'>
           <TabsTrigger variant='secondary' value='all'>
@@ -82,48 +93,59 @@ function BorrowedList() {
 
         {/* Card book list */}
 
-        {filteredLoans.slice(0, visibleCard).map((item: Loan, i: number) => (
-          <TabsContent
-            key={i}
-            className='flex mt-6 flex-col divide-neutral-300 bg-white p-5 gap-5 rounded-2xl'
-            value='all'
-          >
-            {/* status */}
-            <div className='flex justify-between items-center gap-3'>
-              <div className='flex justify-between items-center gap-3'>
-                <h3>Status</h3>
-                <Badge variant='secondary'>{item.status}</Badge>
-              </div>
-              {/* due date */}
-              <div className='flex items-center gap-3'>
-                <h3>Due Date</h3>
-                <Badge variant='destructive'>
-                  {dayjs(item.dueAt).format('DD MMMM YYYY')}
-                </Badge>
-              </div>
-            </div>
+        {Object.entries(tabFilters).map(([key, items]) => (
+          <TabsContent key={key} value={key}>
+            {items.slice(0, visibleCard).map((item: Loan, i: number) => (
+              <div
+                key={i}
+                className='flex mt-6 flex-col divide-neutral-300 bg-white p-5 gap-5 rounded-2xl'
+              >
+                {/* status */}
+                <div className='flex justify-between items-center gap-3'>
+                  <div className='flex items-center gap-3'>
+                    <h3>Status</h3>
+                    <Badge variant='secondary'>{item.status}</Badge>
+                  </div>
+                  {/* due date */}
+                  <div className='flex items-center gap-3'>
+                    <h3>Due Date</h3>
+                    <Badge
+                      variant={
+                        new Date(item.dueAt) < today && !item.returnedAt
+                          ? 'destructive'
+                          : 'secondary'
+                      }
+                    >
+                      {dayjs(item.dueAt).format('DD MMMM YYYY')}
+                    </Badge>
+                  </div>
+                </div>
 
-            {/* line border */}
-            <div className='border-t-2 border-neutral-300 w-full'></div>
+                {/* line border */}
+                <div className='border-t-2 border-neutral-300 w-full'></div>
+                {/* as User */}
+                <CardListBorrowed
+                  bookId={item.bookId}
+                  variant='asUser'
+                  title={item?.Book?.title}
+                  image={item?.Book?.coverImage}
+                  date={dayjs(item?.borrowedAt).format('DD MMMM YYYY')}
+                  duration={(() => {
+                    const start = new Date(item.borrowedAt);
+                    const end = item.returnedAt
+                      ? new Date(item.returnedAt)
+                      : new Date(item.dueAt);
+                    const diff = Math.floor(
+                      (end.setHours(0, 0, 0, 0) - start.setHours(0, 0, 0, 0)) /
+                        (1000 * 60 * 60 * 24)
+                    );
+                    return ` Duration ${diff} Days`;
+                  })()}
+                />
+              </div>
+            ))}
 
-            {/* as User */}
-            <CardListBorrowed
-              bookId={item.bookId}
-              variant='asUser'
-              title={item.Book.title}
-              image={item?.Book?.coverImage}
-              date={dayjs(item.borrowedAt).format('DD MMMM YYYY')}
-              duration={(() => {
-                const borrowedAt = new Date(item.borrowedAt);
-                const dueAt = item.dueAt ? new Date(item.dueAt) : new Date();
-                const diffDays = Math.floor(
-                  (dueAt.setHours(0, 0, 0, 0) -
-                    borrowedAt.setHours(0, 0, 0, 0)) /
-                    (1000 * 60 * 60 * 24)
-                );
-                return ` Duration ${diffDays} Days`;
-              })()}
-            />
+            {items.length === 0 && <p>No loans in this category.</p>}
           </TabsContent>
         ))}
       </Tabs>
