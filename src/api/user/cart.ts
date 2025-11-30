@@ -1,5 +1,5 @@
+import { baseUrl } from '@/config/config';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { baseUrl } from './booklist';
 import axios from 'axios';
 
 export function GetCart() {

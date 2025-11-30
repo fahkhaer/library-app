@@ -1,7 +1,6 @@
+import { baseUrl } from '@/config/config';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { baseUrl } from './booklist';
-
 type PayloadLoan = {
   bookId: number;
   days: number;

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { baseUrl } from './booklist';
 import { Category } from '@/types/books';
+import { baseUrl } from '@/config/config';
 
 export function GetCategories() {
   return useQuery<Category[]>({

@@ -1,6 +1,6 @@
+import { baseUrl } from '@/config/config';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { baseUrl } from './booklist';
 
 export const AddReview = () => {
   const token = localStorage.getItem('token');

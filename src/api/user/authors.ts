@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { baseUrl } from './booklist';
+import { baseUrl } from '@/config/config';
 
 export function GetAuthors() {
   return useQuery({
