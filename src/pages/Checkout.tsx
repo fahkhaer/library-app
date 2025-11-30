@@ -12,13 +12,11 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { RootState } from '@/redux/store';
 import { ApiError } from '@/types/apierror';
 import dayjs from 'dayjs';
 import { Calendar as CalendarIcon, X } from 'lucide-react';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 function Checkout() {
   const { id } = useParams();
@@ -26,12 +24,18 @@ function Checkout() {
   const [date, setDate] = React.useState<Date | undefined>(undefined);
   const [calendarOpen, setCalendarOpen] = React.useState(false);
   const [duration, setDuration] = React.useState<number>(3);
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = {
+    name: localStorage.getItem('username'),
+    email: localStorage.getItem('email'),
+  };
   const navigate = useNavigate();
 
-  const { data: detailBook, isLoading: isLoadingDetail } = Detailbook(
-    Number(id)
-  );
+  const location = useLocation();
+  const { selectedItems } = location.state || { selectedItems: [] };
+
+  const bookId = Number(id) || Number(selectedItems[0]);
+
+  const { data: detailBook, isLoading: isLoadingDetail } = Detailbook(bookId);
 
   const [errorMsg, setErrorMsg] = React.useState<ApiError | null>(null);
   const [showAlert, setShowAlert] = React.useState(false);
@@ -63,7 +67,7 @@ function Checkout() {
 
     addLoan.mutate(
       {
-        bookId: Number(id),
+        bookId: bookId,
         days: duration,
       },
       {
@@ -87,7 +91,7 @@ function Checkout() {
     );
   };
 
-  if (isLoadingDetail && id) return <p> Loading detail...</p>;
+  if (isLoadingDetail) return <p> Loading detail...</p>;
 
   return (
     <Container className='pb-[100px]'>
