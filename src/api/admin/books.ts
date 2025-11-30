@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { baseUrl } from '../user/booklist';
 import { AddBookForm } from '@/types/books';
+import { baseUrl } from '@/config/config';
 
 export const AddApiBook = () => {
   const token = localStorage.getItem('token');

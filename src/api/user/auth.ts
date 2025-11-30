@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/redux/store';
 import { setUser, setToken } from '@/redux/slices/authSlice';
-import { baseUrl } from './booklist';
 import { User, RegisterPayload, RegisterResponse } from '@/types/auth';
+import { baseUrl } from '@/config/config';
 
 // ------------------- LOGIN -------------------
 export function useLogin() {

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-
-export const baseUrl = 'https://be-library-api-xh3x6c5iiq-et.a.run.app';
+import { baseUrl } from '@/config/config';
 
 export function GetBooklist() {
   return useQuery({

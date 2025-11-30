@@ -1,6 +1,6 @@
+import { baseUrl } from '@/config/config';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { baseUrl } from '../user/booklist';
 
 export function GetUsers() {
   const token = localStorage.getItem('token');
