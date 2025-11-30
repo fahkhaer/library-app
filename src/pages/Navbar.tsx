@@ -93,7 +93,7 @@ items-center'
                 ? '/admin'
                 : user?.role === 'USER'
                 ? '/user'
-                : '/'
+                : '/user'
             }
             className='flex gap-4 items-center'
           >
