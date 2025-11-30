@@ -83,10 +83,12 @@ function CardListBorrowed({
           </Badge>
           <h2>{title}</h2>
           <h4>{data?.Author?.name}</h4>
-
-          <span className='md:text-md-bold text-sm-bold'>
-            {date} • {duration}
-          </span>
+          {variant === 'asUser' ||
+            (variant === 'asAdmin' && (
+              <span className='md:text-md-bold text-sm-bold'>
+                {date} • {duration}
+              </span>
+            ))}
         </div>
       </div>
 

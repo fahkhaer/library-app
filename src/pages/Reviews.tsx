@@ -49,7 +49,6 @@ function Reviews() {
                 bookId={review?.bookId}
                 title={review.Book.title}
                 rating={review.star}
-                image={review.Book.coverImage || '/cover-off.png'}
               />
             </div>
 
