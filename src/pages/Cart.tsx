@@ -34,7 +34,7 @@ function Cart() {
 
   const allSelected =
     selectedItems.length === data.items.length && data.items.length > 0;
-
+    
   return (
     <Container className='pb-[100px]'>
       <h1 className='pb-8'>My Cart</h1>
@@ -60,7 +60,7 @@ function Cart() {
             <Button
               onClick={() => deleteCart.mutate()}
               variant='outline'
-              className='w-full md:w-24'
+              className='w-fit md:w-24'
             >
               <h3 className='text-[#EE1D52]'>Clear cart</h3>
             </Button>
@@ -107,14 +107,14 @@ function Cart() {
             disabled={selectedItems.length === 0}
           >
             <Link
-              to={selectedItems.length > 0 ? '/checkout' : '#'}
+              to={selectedItems.length > 0 ? ('/checkout') : '#'}
               state={{ selectedItems }}
               className={
                 selectedItems.length === 0 ? 'pointer-events-none' : ''
               }
             >
               Borrow Books
-            </Link>
+            </Link> 
           </Button>
         </div>
       </div>
