@@ -41,3 +41,23 @@ export function GetUsersPage() {
     refetchOnReconnect: true,
   });
 }
+
+export function GetBorrowers() {
+  const token = localStorage.getItem('token');
+
+  return useQuery({
+    queryKey: ['borrowers'],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}/api/admin/loans/overdue`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      return res.data.data;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  });
+}
