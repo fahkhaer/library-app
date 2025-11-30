@@ -205,10 +205,10 @@ function Register() {
 
             {/* LOGIN LINK */}
             <div className='flex items-center gap-1 justify-center'>
-              <span>Already have an account?</span>
+              <span className='text-md-semibold'>Already have an account?</span>
               <Button variant='link' className='p-0'>
                 <Link to='/login'>
-                  <span className='text-[#1C65DA]'>Log In</span>
+                  <h3 className='text-[#1C65DA]'>Log In</h3>
                 </Link>
               </Button>
             </div>

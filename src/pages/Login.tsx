@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -40,6 +40,7 @@ function Login() {
       onSuccess: (data) => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.user.name);
+        localStorage.setItem('email', data.user.email);
 
         dispatch(setUser(data.user));
 
@@ -106,6 +107,17 @@ function Login() {
             <Button variant='secondary' type='submit' className='w-full'>
               Login
             </Button>
+            <div className='flex items-center gap-1 justify-center '>
+              <span className=' text-md-semibold'>
+                Don&apos;t have an account?{' '}
+              </span>{' '}
+              <Link to={'/register'}>
+                <Button variant='link' className='p-0'>
+                  {' '}
+                  <h3 className=' text-[#1C65DA]'>Register</h3>
+                </Button>{' '}
+              </Link>
+            </div>
           </form>
         </Form>
       </div>
