@@ -128,18 +128,16 @@ function BorrowedList() {
                   bookId={item.bookId}
                   variant='asUser'
                   title={item?.Book?.title}
-                  image={item?.Book?.coverImage}
                   date={dayjs(item?.borrowedAt).format('DD MMMM YYYY')}
                   duration={(() => {
                     const start = new Date(item.borrowedAt);
-                    const end = item.returnedAt
-                      ? new Date(item.returnedAt)
-                      : new Date(item.dueAt);
+                    const end = new Date(item.dueAt);
+
                     const diff = Math.floor(
                       (end.setHours(0, 0, 0, 0) - start.setHours(0, 0, 0, 0)) /
                         (1000 * 60 * 60 * 24)
                     );
-                    return ` Duration ${diff} Days`;
+                    return `Duration ${diff} Days`;
                   })()}
                 />
               </div>
