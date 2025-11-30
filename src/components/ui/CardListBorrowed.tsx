@@ -20,19 +20,19 @@ interface CardListBorrowedProps {
   title?: string | null;
   date?: string | null;
   duration?: string | null;
-  image?: string;
   rating?: number;
   bookId?: number;
+  borrowers?: string | undefined;
 }
 
 function CardListBorrowed({
   variant,
   title,
-  image,
   rating,
   date,
   duration,
   bookId,
+  borrowers,
 }: CardListBorrowedProps) {
   const { data, isLoading, error } = Detailbook(Number(bookId));
 
@@ -72,18 +72,21 @@ function CardListBorrowed({
     <div className='flex flex-col md:flex-row justify-between pb-3 md:pb-5 rounded-2xl bg-white items-start md:items-center gap-4'>
       {/* left side */}
       <div className='flex gap-4'>
-        <img className='h-[138px] w-auto' src={image || '/cover.png'} alt='' />
+        <img
+          className='h-[138px] w-auto'
+          src={data?.coverImage || '/cover-off.png'}
+          alt=''
+        />
         <div className='flex justify-center flex-col gap-1'>
           <Badge variant={'outline'} className='px-2 rounded-sm'>
             {data?.Category?.name}{' '}
           </Badge>
           <h2>{title}</h2>
           <h4>{data?.Author?.name}</h4>
-          {variant === 'asUser' && (
-            <span className='md:text-md-bold text-sm-bold'>
-              {date} • {duration}
-            </span>
-          )}
+
+          <span className='md:text-md-bold text-sm-bold'>
+            {date} • {duration}
+          </span>
         </div>
       </div>
 
@@ -151,7 +154,9 @@ function CardListBorrowed({
             <p className='text-sm-semibold md:text-md-semibold'>
               borrower&apos;s name
             </p>
-            <p className='md:text-xl md:font-bold text-md-semibold'>John Doe</p>
+            <p className='md:text-xl md:font-bold text-md-semibold'>
+              {borrowers}
+            </p>
           </div>
         )}
       </div>
