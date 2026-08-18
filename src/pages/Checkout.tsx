@@ -132,11 +132,11 @@ function Checkout() {
 
               <CardList
                 bookId={Number(id)}
-                genre={detailBook.Category.name}
-                title={detailBook.title}
-                rating={detailBook.rating}
-                author={detailBook.Author.name}
-                image={detailBook.coverImage}
+                genre={detailBook?.category?.name}
+                title={detailBook?.title}
+                rating={detailBook?.rating}
+                author={detailBook?.author?.name}
+                image={detailBook?.coverImage}
               />
             </div>
           </div>

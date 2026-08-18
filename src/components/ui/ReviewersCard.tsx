@@ -30,7 +30,7 @@ function ReviewersCard({ review }: ReviewersCardProps) {
           />
         </Avatar>
         <div>
-          <h2>{review?.User?.name}</h2>
+          <h2>{review?.user?.name}</h2>
           <p className='text-[#0A0D12] text-md-medium'>
             {dayjs(review?.createdAt).format('DD MMMM YYYY, HH:mm')}
           </p>

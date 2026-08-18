@@ -97,10 +97,10 @@ function Home() {
             className='flex flex-col basis-[calc(50%-0.25rem)] md:basis-[calc(25%-0.9375rem)]'
           >
             <Card
-              name={item.title}
-              author={item.Author.name}
-              image={item.coverImage}
-              rating={item.rating}
+              name={item?.title}
+              author={item?.Author?.name}
+              image={item?.coverImage}
+              rating={item?.rating}
             />
           </Link>
         ))}

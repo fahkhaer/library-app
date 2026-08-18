@@ -190,11 +190,11 @@ function DetailPage() {
           </div>
         </div>
         <div className='flex flex-wrap gap-5'>
-          {data?.Review.slice(0, visibleReviews).map((review: Review) => (
+          {data?.reviews?.slice(0, visibleReviews).map((review: Review) => (
             <ReviewersCard key={review.id} review={review} />
           ))}
         </div>
-        {data?.Review.length > visibleReviews && (
+        {data?.reviews?.length > visibleReviews && (
           <LoadMoreButton onClick={handleLoadMore} />
         )}
       </section>
@@ -252,9 +252,9 @@ const Statistics = ({ review, rating, stock }: StatisticsProps) => {
 
   return (
     <div className='mt-[22px] w-full md:w-[173px] flex  items-left divide-neutral-300 flex-row divide-x'>
-      {statistics.map((statistic) => (
+      {statistics.map((statistic,idx) => (
         <div
-          key={statistic.data}
+          key={idx}
           className='flex-1 max-md:w-full max-md:py-5 max-md:last:pb-0 md:pr-9 px-5 first:pl-0'
         >
           <p className='text-left text-md-bold'>{statistic.data}</p>
